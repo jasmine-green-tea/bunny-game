@@ -11,10 +11,6 @@ public class InventoryUI : MonoBehaviour
     public GameObject inventoryPanel;
     public Transform itemsContainer;
     public GameObject itemButtonPrefab;
-    public Text titleText;
-
-    [Header("Настройки")]
-    public string feedingTitle = "Выберите еду для кормления";
 
     private Rabbit targetRabbit;
     private List<GameObject> itemButtons = new List<GameObject>();
@@ -33,7 +29,6 @@ public class InventoryUI : MonoBehaviour
     public void ShowFeedingInventory(Rabbit rabbit)
     {
         targetRabbit = rabbit;
-        titleText.text = $"{feedingTitle}: {rabbit.rabbitName}";
 
         // Очищаем предыдущие кнопки
         ClearItemButtons();
@@ -76,12 +71,6 @@ public class InventoryUI : MonoBehaviour
             targetRabbit.Feed(foodItem);
         }
 
-        HideInventory();
-    }
-
-    // Закрыть инвентарь по кнопке отмены
-    public void OnCancelClicked()
-    {
         HideInventory();
     }
 

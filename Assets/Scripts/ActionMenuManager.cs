@@ -11,7 +11,7 @@ public class ActionMenuManager : MonoBehaviour
     public GameObject actionMenuPanel;
     public Button feedButton;
     // Другие действия
-    public Button cancelButton;
+    //public Button cancelButton;
 
     [Header("Позиционирование")]
     public Vector2 menuOffset = new Vector2(0, 100f);
@@ -30,7 +30,7 @@ public class ActionMenuManager : MonoBehaviour
         // Настраиваем кнопки
         feedButton.onClick.AddListener(OnFeedClicked);
         // Другие действия
-        cancelButton.onClick.AddListener(HideActionMenu);
+        //cancelButton.onClick.AddListener(HideActionMenu);
 
         // Скрываем меню при старте
         HideActionMenu();

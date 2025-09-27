@@ -7,7 +7,6 @@ public class ItemButton : MonoBehaviour
 {
     [Header("UI элементы")]
     public Image itemIcon;
-    public Text itemNameText;
     public Button button;
 
     private FoodItem foodItem;
@@ -21,9 +20,6 @@ public class ItemButton : MonoBehaviour
         // Настраиваем внешний вид кнопки
         if (itemIcon != null && item.itemIcon != null)
             itemIcon.sprite = item.itemIcon;
-
-        if (itemNameText != null)
-            itemNameText.text = item.foodName;
 
         button.onClick.AddListener(OnButtonClicked);
     }

@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 public class Rabbit : MonoBehaviour, IPointerClickHandler
 {
     [Header("Настройки кролика")]
-    public string rabbitName = "Кролик";
+    //public string rabbitName = "Кролик";
+    [SerializeField] private string rabbitName;
     public NeedSystem needSystem;
 
     [Header("Визуальные элементы")]
@@ -18,6 +19,11 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
     public string GetName()
     {
         return rabbitName;
+    }
+
+    public void SetName(string newName)
+    {
+        rabbitName = newName;
     }
 
     void Start()

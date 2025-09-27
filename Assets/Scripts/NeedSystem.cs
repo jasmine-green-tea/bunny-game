@@ -3,6 +3,12 @@ using UnityEngine.UI;
 
 public class NeedSystem : MonoBehaviour
 {
+    [SerializeField] private const float needBarFillFullWidth = 3.2f;
+
+
+
+
+
     private Rabbit rabbit;
 
     [Header("Настройки голода")]
@@ -11,40 +17,58 @@ public class NeedSystem : MonoBehaviour
     public int hungerDecreaseRate = 1; // На сколько уменьшается голод в секунду
     public float hungerDecreaseInterval = 0.3f; // Интервал уменьшения голода в секундах
 
+    [Header("Настройки настроения")]
+    public int maxMood = 100;
+    public int currentMood = 100;
+    public int moodDecreaseRate = 1; // На сколько уменьшается настроения в секунду
+    public float moodDecreaseInterval = 0.3f; // Интервал уменьшения настроения в секундах
+
     [Header("UI элементы")]
-    public Slider hungerSlider;
-    public Image hungerFillImage;
     public Color fullColor = Color.green;
-    public Color hungryColor = Color.yellow;
-    public Color starvingColor = Color.red;
-    public Transform sliderValue;
-    public SpriteRenderer level;
+    public Color mediumColor = Color.yellow;
+    public Color lowColor = Color.red;
+    public Color zeroColor = Color.black;
+    public float fullRate = 1.0f;
+    public float mediumRate = 0.6f;
+    public float lowRate = 0.3f;
+    public float zeroRate = 0.0f;
+    public SpriteRenderer hungerBarFill;
+    public SpriteRenderer moodBarFill;
+
 
     [Header("Статус кролика")]
     public bool isStarving = false;
-    private float timer;
+    public bool isSad = false;
+    private float hungerTimer;
+    private float moodTimer;
 
     void Start()
     {
         rabbit = GetComponent<Rabbit>();
 
         currentHunger = maxHunger;
+        currentMood = maxMood;
         UpdateUI();
-
-        if (hungerSlider == null)
-            hungerSlider = GetComponentInChildren<Slider>();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= hungerDecreaseInterval)
+        hungerTimer += Time.deltaTime;
+        if (hungerTimer >= hungerDecreaseInterval)
         {
             DecreaseHunger(hungerDecreaseRate);
-            timer = 0f;
+            hungerTimer = 0f;
+        }
+
+        moodTimer += Time.deltaTime;
+        if (moodTimer >= moodDecreaseInterval)
+        {
+            DecreaseMood(moodDecreaseRate);
+            moodTimer = 0f;
         }
     }
 
+    // Голод
     public void DecreaseHunger(int amount)
     {
         currentHunger -= amount;
@@ -76,42 +100,94 @@ public class NeedSystem : MonoBehaviour
             // Добавить визуальные эффекты и логику поведения голодного кролика
         }
     }
+    // Конец голода
+
+    // Настроение
+    public void DecreaseMood(int amount)
+    {
+        currentMood -= amount;
+        currentMood = Mathf.Clamp(currentMood, 0, maxMood);
+
+        CheckMood();
+        UpdateUI();
+    }
+
+    public void IncreaseMood(int amount)
+    {
+        currentMood += amount;
+        currentMood = Mathf.Clamp(currentMood, 0, maxMood);
+
+        if (currentMood > 20)
+            isSad = false;
+
+        CheckMood();
+        UpdateUI();
+    }
+
+    private void CheckMood()
+    {
+        if (currentMood <= 10)
+        {
+            isSad = true;
+            string name = rabbit != null ? rabbit.GetName() : gameObject.name;
+            Debug.LogWarning($"{name} грустит! Поиграйте с кроликом!");
+        }
+    }
+    // Конец настроения
+
+    // Чистота
+    // Конец чистоты
 
     private void UpdateUI()
     {
-        if (hungerSlider != null)
-        {
-            hungerSlider.maxValue = maxHunger;
-            hungerSlider.value = currentHunger;
-        }
-
         float hungerPercentage = (float)currentHunger / maxHunger;
-        sliderValue.localScale = new Vector3(hungerPercentage, sliderValue.localScale.y, sliderValue.localScale.z);
+        hungerBarFill.size = new Vector2(needBarFillFullWidth * hungerPercentage, hungerBarFill.size.y);
 
+        float moodPercentage = (float)currentMood / maxMood;
+        moodBarFill.size = new Vector2(needBarFillFullWidth * moodPercentage, moodBarFill.size.y);
+
+
+
+        // hunger
 
         if (hungerPercentage > 0.6f)
-            level.color = fullColor;
+        {
+            float currentRate = (hungerPercentage - mediumRate) / (fullRate - mediumRate);
+            Debug.Log(currentRate);
+            hungerBarFill.color = mediumColor * (1 - currentRate) + fullColor * (currentRate);
+        }
         else if (hungerPercentage > 0.3f)
-            level.color = hungryColor;
+        {
+            float currentRate = (hungerPercentage - lowRate) / (mediumRate - lowRate);
+
+            hungerBarFill.color = lowColor * (1 - currentRate) + mediumColor * (currentRate);
+        }
         else
-            level.color = starvingColor;
+        {
+            float currentRate = (hungerPercentage - zeroRate) / (lowRate - zeroRate);
 
-        // Изменяем цвет в зависимости от уровня голода
-    //    if (hungerFillImage != null)
-    //    {
-    //        float hungerPercentage = (float)currentHunger / maxHunger;
+            hungerBarFill.color = zeroColor * (1 - currentRate) + lowColor * (currentRate);
+        }
 
-    //        if (hungerPercentage > 0.6f)
-    //            hungerFillImage.color = fullColor;
-    //        else if (hungerPercentage > 0.3f)
-    //            hungerFillImage.color = hungryColor;
-    //        else
-    //            hungerFillImage.color = starvingColor;
-    //    }
-    }
 
-    public float GetHungerPercentage()
-    {
-        return (float)currentHunger / maxHunger;
+        // mood
+        if (moodPercentage > 0.6f)
+        {
+            float currentRate = (moodPercentage - mediumRate) / (fullRate - mediumRate);
+
+            moodBarFill.color = mediumColor * (1 - currentRate) + fullColor * (currentRate);
+        }
+        else if (moodPercentage > 0.3f)
+        {
+            float currentRate = (moodPercentage - lowRate) / (mediumRate - lowRate);
+
+            moodBarFill.color = lowColor * (1 - currentRate) + mediumColor * (currentRate);
+        }
+        else
+        {
+            float currentRate = (moodPercentage - zeroRate) / (lowRate - zeroRate);
+
+            moodBarFill.color = zeroColor * (1 - currentRate) + lowColor * (currentRate);
+        }
     }
 }
