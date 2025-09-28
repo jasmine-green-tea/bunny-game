@@ -5,10 +5,6 @@ public class NeedSystem : MonoBehaviour
 {
     [SerializeField] private const float needBarFillFullWidth = 3.2f;
 
-
-
-
-
     private Rabbit rabbit;
 
     [Header("Настройки голода")]
@@ -23,6 +19,12 @@ public class NeedSystem : MonoBehaviour
     public int moodDecreaseRate = 1; // На сколько уменьшается настроения в секунду
     public float moodDecreaseInterval = 0.3f; // Интервал уменьшения настроения в секундах
 
+    [Header("Настройки чистоты")]
+    public int maxHygiene = 100;
+    public int currentHygiene = 100;
+    public int hygieneDecreaseRate = 1; // На сколько уменьшается чистоты в секунду
+    public float hygieneDecreaseInterval = 0.3f; // Интервал уменьшения чистоты в секундах
+
     [Header("UI элементы")]
     public Color fullColor = Color.green;
     public Color mediumColor = Color.yellow;
@@ -34,13 +36,16 @@ public class NeedSystem : MonoBehaviour
     public float zeroRate = 0.0f;
     public SpriteRenderer hungerBarFill;
     public SpriteRenderer moodBarFill;
+    public SpriteRenderer hygieneBarFill;
 
 
     [Header("Статус кролика")]
     public bool isStarving = false;
     public bool isSad = false;
+    public bool isDirty = false;
     private float hungerTimer;
     private float moodTimer;
+    private float hygieneTimer;
 
     void Start()
     {
@@ -65,6 +70,13 @@ public class NeedSystem : MonoBehaviour
         {
             DecreaseMood(moodDecreaseRate);
             moodTimer = 0f;
+        }
+
+        hygieneTimer += Time.deltaTime;
+        if (hygieneTimer >= hygieneDecreaseInterval)
+        {
+            DecreaseHygiene(hygieneDecreaseRate);
+            hygieneTimer = 0f;
         }
     }
 
@@ -136,6 +148,36 @@ public class NeedSystem : MonoBehaviour
     // Конец настроения
 
     // Чистота
+    public void DecreaseHygiene(int amount)
+    {
+        currentHygiene -= amount;
+        currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
+
+        CheckHygiene();
+        UpdateUI();
+    }
+
+    public void IncreaseHygiene(int amount)
+    {
+        currentHygiene += amount;
+        currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
+
+        if (currentHygiene > 20)
+            isDirty = false;
+
+        CheckHygiene();
+        UpdateUI();
+    }
+
+    private void CheckHygiene()
+    {
+        if (currentHygiene <= 10)
+        {
+            isSad = true;
+            string name = rabbit != null ? rabbit.GetName() : gameObject.name;
+            Debug.LogWarning($"{name} не любит быть в грязи! Прибиритесь!");
+        }
+    }
     // Конец чистоты
 
     private void UpdateUI()
@@ -146,10 +188,10 @@ public class NeedSystem : MonoBehaviour
         float moodPercentage = (float)currentMood / maxMood;
         moodBarFill.size = new Vector2(needBarFillFullWidth * moodPercentage, moodBarFill.size.y);
 
+        float hygienePercentage = (float)currentHygiene / maxHygiene;
+        hygieneBarFill.size = new Vector2(needBarFillFullWidth * hygienePercentage, hygieneBarFill.size.y);
 
-
-        // hunger
-
+        // Голод
         if (hungerPercentage > 0.6f)
         {
             float currentRate = (hungerPercentage - mediumRate) / (fullRate - mediumRate);
@@ -170,7 +212,7 @@ public class NeedSystem : MonoBehaviour
         }
 
 
-        // mood
+        // Настроение
         if (moodPercentage > 0.6f)
         {
             float currentRate = (moodPercentage - mediumRate) / (fullRate - mediumRate);
@@ -188,6 +230,26 @@ public class NeedSystem : MonoBehaviour
             float currentRate = (moodPercentage - zeroRate) / (lowRate - zeroRate);
 
             moodBarFill.color = zeroColor * (1 - currentRate) + lowColor * (currentRate);
+        }
+
+        // Чистота
+        if (hygienePercentage > 0.6f)
+        {
+            float currentRate = (hygienePercentage - mediumRate) / (fullRate - mediumRate);
+
+            hygieneBarFill.color = mediumColor * (1 - currentRate) + fullColor * (currentRate);
+        }
+        else if (hygienePercentage > 0.3f)
+        {
+            float currentRate = (hygienePercentage - lowRate) / (mediumRate - lowRate);
+
+            hygieneBarFill.color = lowColor * (1 - currentRate) + mediumColor * (currentRate);
+        }
+        else
+        {
+            float currentRate = (hygienePercentage - zeroRate) / (lowRate - zeroRate);
+
+            hygieneBarFill.color = zeroColor * (1 - currentRate) + lowColor * (currentRate);
         }
     }
 }

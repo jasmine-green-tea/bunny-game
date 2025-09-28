@@ -61,17 +61,30 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
             selectionCircle.SetActive(false);
     }
 
-    public void Feed(FoodItem foodItem)
+    public void Consume(InventoryItem inventoryItem)
     {
-        if (needSystem != null && foodItem != null)
+        if (needSystem != null && inventoryItem != null)
         {
-            needSystem.IncreaseHunger(foodItem.hungerRestore);
-            Debug.Log($"{rabbitName} покормлен на {foodItem.foodName}!");
+            // здесь возможно будут анимации на определенное поведение
+            switch (inventoryItem.itemType)
+            {
+                case ItemType.Food:
+                    needSystem.IncreaseHunger(inventoryItem.restoreValue);
+                    Debug.Log($"{rabbitName} покормлен на {inventoryItem.itemName}!");
+
+                    break;
+                case ItemType.Toy:
+                    needSystem.IncreaseMood(inventoryItem.restoreValue);
+                    Debug.Log($"{rabbitName} поигран на {inventoryItem.itemName}!");
+
+                    break;
+            }
+
 
             // Анимация
 
             // Убираем еду из инвентаря
-            InventoryManager.Instance.RemoveItem(foodItem);
+            InventoryManager.Instance.RemoveItem(inventoryItem);
         }
     }
 

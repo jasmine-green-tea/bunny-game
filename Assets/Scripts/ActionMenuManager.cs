@@ -10,11 +10,13 @@ public class ActionMenuManager : MonoBehaviour
     [Header("UI элементы")]
     public GameObject actionMenuPanel;
     public Button feedButton;
+    public Button playButton;
     // Другие действия
     //public Button cancelButton;
 
     [Header("Позиционирование")]
     public Vector2 menuOffset = new Vector2(0, 100f);
+    private Vector2 inventoryPosition = Vector2.zero; 
 
     private Rabbit currentRabbit;
     private Camera mainCamera;
@@ -29,6 +31,7 @@ public class ActionMenuManager : MonoBehaviour
     {
         // Настраиваем кнопки
         feedButton.onClick.AddListener(OnFeedClicked);
+        playButton.onClick.AddListener(OnPlayClicked);
         // Другие действия
         //cancelButton.onClick.AddListener(HideActionMenu);
 
@@ -44,6 +47,7 @@ public class ActionMenuManager : MonoBehaviour
         // Позиционируем меню над кроликом
         Vector2 screenPosition = mainCamera.WorldToScreenPoint(rabbit.transform.position);
         actionMenuPanel.transform.position = screenPosition + menuOffset;
+        inventoryPosition = screenPosition + menuOffset;
 
         // Активируем только доступные действия
         feedButton.gameObject.SetActive(rabbit.canBeFed);
@@ -61,9 +65,15 @@ public class ActionMenuManager : MonoBehaviour
 
     private void OnFeedClicked()
     {
-
         // Показываем инвентарь для кормления
-        InventoryUI.Instance.ShowFeedingInventory(currentRabbit);
+        InventoryUI.Instance.ShowInventory(currentRabbit, inventoryPosition, ItemType.Food);
+        HideActionMenu();
+    }
+
+    private void OnPlayClicked()
+    {
+        // Показываем инвентарь для игр
+        InventoryUI.Instance.ShowInventory(currentRabbit, inventoryPosition, ItemType.Toy);
         HideActionMenu();
     }
 

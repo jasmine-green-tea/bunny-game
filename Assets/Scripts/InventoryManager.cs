@@ -7,49 +7,49 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
 
     [Header("Инвентарь")]
-    public List<FoodItem> foodItems = new List<FoodItem>();
+    public List<InventoryItem> inventoryItems = new List<InventoryItem>();
 
     [Header("Стартовые предметы")]
-    public FoodItem[] startingItems;
+    public InventoryItem[] startingItems;
 
     private void Awake()
     {
         Instance = this;
 
         // Добавляем стартовые предметы
-        foreach (FoodItem item in startingItems)
+        foreach (InventoryItem item in startingItems)
         {
             AddItem(item);
         }
     }
 
     // Добавить предмет в инвентарь
-    public void AddItem(FoodItem item)
+    public void AddItem(InventoryItem item)
     {
-        foodItems.Add(item);
-        Debug.Log($"Добавлено в инвентарь: {item.foodName}");
+        inventoryItems.Add(item);
+        Debug.Log($"Добавлено в инвентарь: {item.itemName}");
     }
 
     // Удалить предмет из инвентаря
-    public void RemoveItem(FoodItem item)
+    public void RemoveItem(InventoryItem item)
     {
-        if (foodItems.Contains(item))
+        if (inventoryItems.Contains(item))
         {
-            foodItems.Remove(item);
-            Debug.Log($"Удалено из инвентаря: {item.foodName}");
+            inventoryItems.Remove(item);
+            Debug.Log($"Удалено из инвентаря: {item.itemName}");
         }
     }
 
     // Получить все предметы для кормления
-    public List<FoodItem> GetFoodItems()
+    public List<InventoryItem> GetInventoryItems()
     {
-        return new List<FoodItem>(foodItems);
+        return new List<InventoryItem>(inventoryItems);
     }
 
     // Проверить, есть ли еда в инвентаре
     public bool HasFood()
     {
-        return foodItems.Count > 0;
+        return inventoryItems.Count > 0;
     }
 
     void Start()

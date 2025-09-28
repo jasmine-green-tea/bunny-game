@@ -15,9 +15,13 @@ public class InventoryUI : MonoBehaviour
     private Rabbit targetRabbit;
     private List<GameObject> itemButtons = new List<GameObject>();
 
+    private GridLayoutGroup itemsContainerLayout;
+
     private void Awake()
     {
         Instance = this;
+        if (itemsContainerLayout == null)
+            itemsContainerLayout = itemsContainer.GetComponentInChildren<GridLayoutGroup>();
     }
 
     void Start()
@@ -26,25 +30,41 @@ public class InventoryUI : MonoBehaviour
     }
 
     // Показать инвентарь для кормления
-    public void ShowFeedingInventory(Rabbit rabbit)
+    public void ShowInventory(Rabbit rabbit, Vector2 inventoryPosition, ItemType itemType)
     {
         targetRabbit = rabbit;
 
         // Очищаем предыдущие кнопки
         ClearItemButtons();
 
+        int itemCount = 0;
+
         // Создаем кнопки для каждой еды
-        foreach (FoodItem foodItem in InventoryManager.Instance.GetFoodItems())
+        foreach (InventoryItem inventoryItem in InventoryManager.Instance.GetInventoryItems())
         {
+            if (inventoryItem.itemType != itemType)
+                continue;
             GameObject buttonObj = Instantiate(itemButtonPrefab, itemsContainer);
             ItemButton itemButton = buttonObj.GetComponent<ItemButton>();
 
-            itemButton.Setup(foodItem, OnFoodSelected);
+            itemButton.Setup(inventoryItem, OnItemSelected);
             itemButtons.Add(buttonObj);
+            itemCount++;
         }
 
+        inventoryPanel.transform.position = inventoryPosition;
         // Показываем панель
         inventoryPanel.SetActive(true);
+
+        if (itemCount >= 3)
+        {
+            itemsContainerLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            itemsContainerLayout.constraintCount = 3;
+        }
+        else
+        {
+            itemsContainerLayout.constraint = GridLayoutGroup.Constraint.Flexible;
+        }
     }
 
     public void HideInventory()
@@ -63,12 +83,12 @@ public class InventoryUI : MonoBehaviour
         itemButtons.Clear();
     }
 
-    private void OnFoodSelected(FoodItem foodItem)
+    private void OnItemSelected(InventoryItem inventoryItem)
     {
-        if (targetRabbit != null && foodItem != null)
+        if (targetRabbit != null && inventoryItem != null)
         {
             // Кормим кролика
-            targetRabbit.Feed(foodItem);
+            targetRabbit.Consume(inventoryItem);
         }
 
         HideInventory();

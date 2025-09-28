@@ -9,12 +9,12 @@ public class ItemButton : MonoBehaviour
     public Image itemIcon;
     public Button button;
 
-    private FoodItem foodItem;
-    private Action<FoodItem> onItemSelected;
+    private InventoryItem inventoryItem;
+    private Action<InventoryItem> onItemSelected;
 
-    public void Setup(FoodItem item, Action<FoodItem> callback)
+    public void Setup(InventoryItem item, Action<InventoryItem> callback)
     {
-        foodItem = item;
+        inventoryItem = item;
         onItemSelected = callback;
 
         // Настраиваем внешний вид кнопки
@@ -26,7 +26,7 @@ public class ItemButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        onItemSelected?.Invoke(foodItem);
+        onItemSelected?.Invoke(inventoryItem);
     }
 
     void Start()
