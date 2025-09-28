@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ball
   m_EditorClassIdentifier: 
   itemName: "\u041C\u044F\u0447\u0438\u043A"
-  itemIcon: {fileID: 21300000, guid: 862e43d6e0eed994f987d30091706cf8, type: 3}
+  itemIcon: {fileID: 21300000, guid: 637ddcac77881d44abfb601e852d4c38, type: 3}
   itemPrefab: {fileID: 1346183651460259173, guid: bd44c95c86af8f948ba57b64072b6515, type: 3}
   restoreValue: 20
   itemType: 1

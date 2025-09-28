@@ -195,7 +195,6 @@ public class NeedSystem : MonoBehaviour
         if (hungerPercentage > 0.6f)
         {
             float currentRate = (hungerPercentage - mediumRate) / (fullRate - mediumRate);
-            Debug.Log(currentRate);
             hungerBarFill.color = mediumColor * (1 - currentRate) + fullColor * (currentRate);
         }
         else if (hungerPercentage > 0.3f)
