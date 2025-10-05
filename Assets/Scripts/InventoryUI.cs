@@ -39,15 +39,16 @@ public class InventoryUI : MonoBehaviour
 
         int itemCount = 0;
 
-        // Создаем кнопки для каждой еды
-        foreach (InventoryItem inventoryItem in InventoryManager.Instance.GetInventoryItems())
+
+        foreach (KeyValuePair<InventoryItem, int> entry in InventoryManager.Instance.GetInventoryItemsMap())
         {
-            if (inventoryItem.itemType != itemType)
+            if (entry.Key.itemType != itemType)
                 continue;
+
             GameObject buttonObj = Instantiate(itemButtonPrefab, itemsContainer);
             ItemButton itemButton = buttonObj.GetComponent<ItemButton>();
 
-            itemButton.Setup(inventoryItem, OnItemSelected);
+            itemButton.Setup(entry.Key, entry.Value, OnItemSelected);
             itemButtons.Add(buttonObj);
             itemCount++;
         }

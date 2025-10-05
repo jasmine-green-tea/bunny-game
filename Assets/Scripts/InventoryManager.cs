@@ -1,55 +1,51 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    [Header("Инвентарь")]
-    public List<InventoryItem> inventoryItems = new List<InventoryItem>();
+    public InventoryInitializer InventoryInitializer;
 
-    [Header("Стартовые предметы")]
-    public InventoryItem[] startingItems;
+    [Header("Инвентарь")]
+    public Dictionary<InventoryItem, int> inventoryItemsMap = new Dictionary<InventoryItem, int>();
+
 
     private void Awake()
     {
         Instance = this;
-
-        // Добавляем стартовые предметы
-        foreach (InventoryItem item in startingItems)
+        
+        foreach (InventoryItemBatch entry in InventoryInitializer.items)
         {
-            AddItem(item);
-        }
-    }
+            inventoryItemsMap.Add(entry.item, entry.count);
+            Debug.Log($"Добавлено в инвентарь: {entry.item.itemName}, количество: {entry.count}");
 
-    // Добавить предмет в инвентарь
-    public void AddItem(InventoryItem item)
-    {
-        inventoryItems.Add(item);
-        Debug.Log($"Добавлено в инвентарь: {item.itemName}");
+        }
     }
 
     // Удалить предмет из инвентаря
     public void RemoveItem(InventoryItem item)
     {
-        if (inventoryItems.Contains(item))
+        int currentItemCount = --inventoryItemsMap[item];
+        Debug.Log($"Удалено из инвентаря: 1 {item.itemName}, количество: {currentItemCount}");
+        if (currentItemCount == 0)
         {
-            inventoryItems.Remove(item);
-            Debug.Log($"Удалено из инвентаря: {item.itemName}");
+            inventoryItemsMap.Remove(item);
         }
     }
 
-    // Получить все предметы для кормления
-    public List<InventoryItem> GetInventoryItems()
+    public Dictionary<InventoryItem, int> GetInventoryItemsMap()
     {
-        return new List<InventoryItem>(inventoryItems);
+        return inventoryItemsMap;
     }
 
     // Проверить, есть ли еда в инвентаре
     public bool HasFood()
     {
-        return inventoryItems.Count > 0;
+        return inventoryItemsMap.Count > 0;
     }
 
     void Start()
