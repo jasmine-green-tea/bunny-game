@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class InventoryManager : MonoBehaviour
 {
