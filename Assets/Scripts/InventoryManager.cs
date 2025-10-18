@@ -19,7 +19,7 @@ public class InventoryManager : MonoBehaviour
         foreach (InventoryItemBatch entry in InventoryInitializer.items)
         {
             inventoryItemsMap.Add(entry.item, entry.count);
-            Debug.Log($"Добавлено в инвентарь: {entry.item.itemName}, количество: {entry.count}");
+            //Debug.Log($"Добавлено в инвентарь: {entry.item.itemName}, количество: {entry.count}");
 
         }
     }
@@ -27,12 +27,12 @@ public class InventoryManager : MonoBehaviour
     // Удалить предмет из инвентаря
     public void RemoveItem(InventoryItem item)
     {
-        int currentItemCount = --inventoryItemsMap[item];
-        Debug.Log($"Удалено из инвентаря: 1 {item.itemName}, количество: {currentItemCount}");
-        if (currentItemCount == 0)
-        {
-            inventoryItemsMap.Remove(item);
-        }
+        //int currentItemCount = --inventoryItemsMap[item];
+        //Debug.Log($"Удалено из инвентаря: 1 {item.itemName}, количество: {currentItemCount}");
+        //if (currentItemCount == 0)
+        //{
+        //    inventoryItemsMap.Remove(item);
+        //}
     }
 
     public Dictionary<InventoryItem, int> GetInventoryItemsMap()
