@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TimeManager : MonoBehaviour
 {
@@ -12,9 +13,13 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField]
     private GameObject ui;
+    [SerializeField]
+    private TMP_Text timeText;
 
     [SerializeField]
     private float dayTimeSeconds = 100f;
+    [SerializeField]
+    private int dayHourStart = 8;
 
     private string currentDayStr;
 
@@ -104,8 +109,15 @@ public class TimeManager : MonoBehaviour
 
     private IEnumerator DayTimerCoroutine()
     {
+        for (int i = 0; i < dayTimeSeconds / 60; i++)
+        {
+            for (int j = 0; j < 60; j++)
+            {
+                timeText.text = (dayHourStart + i).ToString() + ":" + (j > 9 ? j.ToString() : "0" + j.ToString());
+                yield return new WaitForSeconds(1);
+            }
 
-        yield return new WaitForSeconds(dayTimeSeconds);
+        }
 
         // set a flag to all bunnies to prevent them from losing stats
         RabbitManager.Instance.SetRabbitsPause(true);
