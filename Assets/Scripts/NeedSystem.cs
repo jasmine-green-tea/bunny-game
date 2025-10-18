@@ -6,6 +6,7 @@ public class NeedSystem : MonoBehaviour
     [SerializeField] private const float needBarFillFullWidth = 3.2f;
 
     private Rabbit rabbit;
+    private bool paused = false;
 
     [Header("Настройки голода")]
     public int maxHunger = 100;
@@ -47,6 +48,11 @@ public class NeedSystem : MonoBehaviour
     private float moodTimer;
     private float hygieneTimer;
 
+    public void Pause(bool paused)
+    {
+        this.paused = paused;
+    }
+
     void Start()
     {
         rabbit = GetComponent<Rabbit>();
@@ -83,6 +89,8 @@ public class NeedSystem : MonoBehaviour
     // Голод
     public void DecreaseHunger(int amount)
     {
+        if (paused)
+            return;
         currentHunger -= amount;
         currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
 
@@ -117,6 +125,8 @@ public class NeedSystem : MonoBehaviour
     // Настроение
     public void DecreaseMood(int amount)
     {
+        if (paused)
+            return;
         currentMood -= amount;
         currentMood = Mathf.Clamp(currentMood, 0, maxMood);
 
@@ -150,6 +160,8 @@ public class NeedSystem : MonoBehaviour
     // Чистота
     public void DecreaseHygiene(int amount)
     {
+        if (paused)
+            return;
         currentHygiene -= amount;
         currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
 

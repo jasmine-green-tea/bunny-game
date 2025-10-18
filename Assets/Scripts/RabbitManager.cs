@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,6 +42,14 @@ public class RabbitManager : MonoBehaviour
         }
 
         currentlySelectedRabbit = exception;
+    }
+
+    public void SetRabbitsPause(bool paused)
+    {
+        foreach (Rabbit rabbit in allRabbits)
+        {
+            rabbit.SetPausedStatus(paused);
+        }
     }
 
     void Start()

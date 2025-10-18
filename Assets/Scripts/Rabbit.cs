@@ -16,6 +16,11 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
     public bool canBeFed = true;
     // Другие действия
 
+    public void SetPausedStatus(bool paused)
+    {
+        needSystem.Pause(paused);
+    }
+
     public string GetName()
     {
         return rabbitName;
@@ -33,6 +38,8 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
 
         if (selectionCircle != null)
             selectionCircle.SetActive(false);
+
+        RabbitManager.Instance.RegisterRabbit(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
+
+    public static TimeManager Instance;
+
     private int currentMonth = 1;
     private int currentDay = 1;
 
     [SerializeField]
-    private float dayTimeSeconds = 100f;
+    private GameObject ui;
 
-    private float daySecondsCounter = 0f;
+    [SerializeField]
+    private float dayTimeSeconds = 100f;
 
     private string currentDayStr;
 
+    private Coroutine timerCoroutine;
 
     private string GetMonthName()
     {
@@ -82,29 +87,45 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         currentDayStr = GetMonthName() + " " + currentDay.ToString();
+        ReleaseDay();
     }
 
     private void Update()
     {
-        daySecondsCounter += Time.deltaTime;
 
-        if (daySecondsCounter >= dayTimeSeconds)
+    }
+
+    public void ReleaseDay()
+    {
+        ui.SetActive(false);
+        RabbitManager.Instance.SetRabbitsPause(false);
+        timerCoroutine = StartCoroutine(DayTimerCoroutine());
+    }
+
+    private IEnumerator DayTimerCoroutine()
+    {
+
+        yield return new WaitForSeconds(dayTimeSeconds);
+
+        // set a flag to all bunnies to prevent them from losing stats
+        RabbitManager.Instance.SetRabbitsPause(true);
+
+        Debug.Log(currentDayStr);
+        ui.SetActive(true);
+
+        if (currentDay + 1 > GetMaxMonthDays())
         {
-            // increase day, switch to new day, show progress
-            if (currentDay + 1 > GetMaxMonthDays())
-            {
-                currentDay = 1;
-                currentMonth = (currentMonth + 1) % 13;
-                if (currentMonth == 0)
-                    currentMonth = 1;
-            }
-            else
-                currentDay++;
-
-            currentDayStr = GetMonthName() + " " + currentDay.ToString();
-
-
-            daySecondsCounter = 0f;
+            currentDay = 1;
+            currentMonth = (currentMonth + 1) % 13;
+            if (currentMonth == 0)
+                currentMonth = 1;
         }
+        else
+            currentDay++;
+
+        currentDayStr = GetMonthName() + " " + currentDay.ToString();
+
+
+        yield return null;
     }
 }
