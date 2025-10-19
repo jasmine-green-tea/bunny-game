@@ -82,7 +82,8 @@ public class RabbitManager : MonoBehaviour
 
     void Start()
     {
-        
+        GenerateNewRabbit();
+        GenerateNewRabbit();
     }
 
     void Update()

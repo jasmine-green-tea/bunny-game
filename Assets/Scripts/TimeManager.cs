@@ -16,6 +16,8 @@ public class TimeManager : MonoBehaviour
     private GameObject ui;
     [SerializeField]
     private TMP_Text timeText;
+    [SerializeField]
+    private TMP_Text countdownText;
 
     [SerializeField]
     private float dayTimeSeconds = 100f;
@@ -112,7 +114,7 @@ public class TimeManager : MonoBehaviour
     public void ReleaseDay()
     {
 
-        int currentDayRabbits = UnityEngine.Random.Range(0, maxRabbitsPerDay);
+        int currentDayRabbits = UnityEngine.Random.Range(maxRabbitsPerDay / 2, maxRabbitsPerDay);
         Debug.Log("rabbits count = " + currentDayRabbits);
 
         if (currentDayRabbits > 0)
@@ -146,6 +148,9 @@ public class TimeManager : MonoBehaviour
                 counter++;
                 if (currentTimestampIndex != -1)
                 {
+                    string countdownString = "new rabbit in: " + (timestamps[currentTimestampIndex] - counter).ToString();
+                    countdownText.text = countdownString;
+
                     if (counter == timestamps[currentTimestampIndex])
                     {
                         currentTimestampIndex++;
