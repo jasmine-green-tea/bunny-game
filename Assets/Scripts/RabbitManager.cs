@@ -1,14 +1,20 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RabbitManager : MonoBehaviour
 {
     public static RabbitManager Instance;
 
+    [SerializeField]
+    private GameObject rabbitPrefab;
+
     [Header("Управление кроликами")]
     public List<Rabbit> allRabbits = new List<Rabbit>();
     public Rabbit currentlySelectedRabbit;
+
+    public int maxRabbits = 10;
 
     private void Awake()
     {
@@ -17,6 +23,8 @@ public class RabbitManager : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
+    
 
     // регистрация нового кролика
     public void RegisterRabbit(Rabbit rabbit)
@@ -50,6 +58,26 @@ public class RabbitManager : MonoBehaviour
         {
             rabbit.SetPausedStatus(paused);
         }
+    }
+
+    public void GenerateNewRabbit()
+    {
+
+        GameObject rabbit = Instantiate(rabbitPrefab, transform);
+        rabbit.SetActive(true);
+       
+        Rabbit newRabbit = rabbit.GetComponent<Rabbit>();
+
+        // Random generation of rabbit stats
+        string newName = "Кролик " + UnityEngine.Random.Range(0, 100).ToString();
+        newRabbit.SetName(newName);
+        rabbit.name = newName;
+        
+        newRabbit.SetNeedSystemMultipliers(UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f));
+        newRabbit.SetPausedStatus(false);
+
+        RegisterRabbit(newRabbit);
+
     }
 
     void Start()

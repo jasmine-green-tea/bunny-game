@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Diagnostics.Tracing;
 
 public class TimeManager : MonoBehaviour
 {
@@ -20,6 +21,14 @@ public class TimeManager : MonoBehaviour
     private float dayTimeSeconds = 100f;
     [SerializeField]
     private int dayHourStart = 8;
+
+    [SerializeField]
+    private int maxRabbitsPerDay = 2;
+
+    private int counter = 0;
+    private int currentTimestampIndex = -1;
+
+    private List<int> timestamps = new List<int>();
 
     private string currentDayStr;
 
@@ -102,6 +111,25 @@ public class TimeManager : MonoBehaviour
 
     public void ReleaseDay()
     {
+
+        int currentDayRabbits = UnityEngine.Random.Range(0, maxRabbitsPerDay);
+        Debug.Log("rabbits count = " + currentDayRabbits);
+
+        if (currentDayRabbits > 0)
+        {
+            if (timestamps.Count > 0)
+                timestamps.Clear();
+            timestamps = new List<int>();
+            for (int i = 0; i < currentDayRabbits; i++)
+            {
+                timestamps.Add((i+1) * ((int)dayTimeSeconds / (currentDayRabbits + 1)));
+                Debug.Log("added timestamp: " + (i + 1) * ((int)dayTimeSeconds / (currentDayRabbits + 1)));
+            }
+
+            currentTimestampIndex = 0;
+        }
+       
+
         ui.SetActive(false);
         RabbitManager.Instance.SetRabbitsPause(false);
         timerCoroutine = StartCoroutine(DayTimerCoroutine());
@@ -115,6 +143,19 @@ public class TimeManager : MonoBehaviour
             {
                 timeText.text = (dayHourStart + i).ToString() + ":" + (j > 9 ? j.ToString() : "0" + j.ToString());
                 yield return new WaitForSeconds(1);
+                counter++;
+                if (currentTimestampIndex != -1)
+                {
+                    if (counter == timestamps[currentTimestampIndex])
+                    {
+                        currentTimestampIndex++;
+                        if (currentTimestampIndex == timestamps.Count)
+                            currentTimestampIndex = -1;
+
+                        RabbitManager.Instance.GenerateNewRabbit();
+
+                    }
+                }
             }
 
         }

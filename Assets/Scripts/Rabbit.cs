@@ -31,6 +31,15 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
         rabbitName = newName;
     }
 
+    public void SetNeedSystemMultipliers(float hungerRate, float moodRate, float hygieneRate)
+    {
+        needSystem.hungerDecreaseRate = hungerRate;
+        needSystem.moodDecreaseRate = moodRate;
+        needSystem.hygieneDecreaseRate = hygieneRate;
+
+
+    }
+
     void Start()
     {
         if (needSystem == null)
@@ -39,7 +48,7 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler
         if (selectionCircle != null)
             selectionCircle.SetActive(false);
 
-        RabbitManager.Instance.RegisterRabbit(this);
+        //RabbitManager.Instance.RegisterRabbit(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)

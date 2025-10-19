@@ -9,21 +9,21 @@ public class NeedSystem : MonoBehaviour
     private bool paused = false;
 
     [Header("Настройки голода")]
-    public int maxHunger = 100;
-    public int currentHunger = 100;
-    public int hungerDecreaseRate = 1; // На сколько уменьшается голод в секунду
+    public float maxHunger = 100f;
+    public float currentHunger = 100f;
+    public float hungerDecreaseRate = 1f; // На сколько уменьшается голод в секунду
     public float hungerDecreaseInterval = 0.3f; // Интервал уменьшения голода в секундах
 
     [Header("Настройки настроения")]
-    public int maxMood = 100;
-    public int currentMood = 100;
-    public int moodDecreaseRate = 1; // На сколько уменьшается настроения в секунду
+    public float maxMood = 100f;
+    public float currentMood = 100f;
+    public float moodDecreaseRate = 1f; // На сколько уменьшается настроения в секунду
     public float moodDecreaseInterval = 0.3f; // Интервал уменьшения настроения в секундах
 
     [Header("Настройки чистоты")]
-    public int maxHygiene = 100;
-    public int currentHygiene = 100;
-    public int hygieneDecreaseRate = 1; // На сколько уменьшается чистоты в секунду
+    public float maxHygiene = 100f;
+    public float currentHygiene = 100f;
+    public float hygieneDecreaseRate = 1f; // На сколько уменьшается чистоты в секунду
     public float hygieneDecreaseInterval = 0.3f; // Интервал уменьшения чистоты в секундах
 
     [Header("UI элементы")]
@@ -64,30 +64,13 @@ public class NeedSystem : MonoBehaviour
 
     void Update()
     {
-        hungerTimer += Time.deltaTime;
-        if (hungerTimer >= hungerDecreaseInterval)
-        {
-            DecreaseHunger(hungerDecreaseRate);
-            hungerTimer = 0f;
-        }
-
-        moodTimer += Time.deltaTime;
-        if (moodTimer >= moodDecreaseInterval)
-        {
-            DecreaseMood(moodDecreaseRate);
-            moodTimer = 0f;
-        }
-
-        hygieneTimer += Time.deltaTime;
-        if (hygieneTimer >= hygieneDecreaseInterval)
-        {
-            DecreaseHygiene(hygieneDecreaseRate);
-            hygieneTimer = 0f;
-        }
+        DecreaseHunger(hungerDecreaseRate * Time.deltaTime);
+        DecreaseMood(moodDecreaseRate * Time.deltaTime);
+        DecreaseHygiene(hygieneDecreaseRate * Time.deltaTime);
     }
 
     // Голод
-    public void DecreaseHunger(int amount)
+    public void DecreaseHunger(float amount)
     {
         if (paused)
             return;
@@ -116,14 +99,14 @@ public class NeedSystem : MonoBehaviour
         {
             isStarving = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
-            Debug.LogWarning($"{name} голодает! Накормите кролика!");
+            //Debug.LogWarning($"{name} голодает! Накормите кролика!");
             // Добавить визуальные эффекты и логику поведения голодного кролика
         }
     }
     // Конец голода
 
     // Настроение
-    public void DecreaseMood(int amount)
+    public void DecreaseMood(float amount)
     {
         if (paused)
             return;
@@ -152,13 +135,13 @@ public class NeedSystem : MonoBehaviour
         {
             isSad = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
-            Debug.LogWarning($"{name} грустит! Поиграйте с кроликом!");
+            //Debug.LogWarning($"{name} грустит! Поиграйте с кроликом!");
         }
     }
     // Конец настроения
 
     // Чистота
-    public void DecreaseHygiene(int amount)
+    public void DecreaseHygiene(float amount)
     {
         if (paused)
             return;
@@ -187,17 +170,17 @@ public class NeedSystem : MonoBehaviour
         {
             isSad = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
-            Debug.LogWarning($"{name} не любит быть в грязи! Прибиритесь!");
+            //Debug.LogWarning($"{name} не любит быть в грязи! Прибиритесь!");
         }
     }
     // Конец чистоты
 
     private void UpdateUI()
     {
-        float hungerPercentage = (float)currentHunger / maxHunger;
+        float hungerPercentage = currentHunger / maxHunger;
         hungerBarFill.size = new Vector2(needBarFillFullWidth * hungerPercentage, hungerBarFill.size.y);
 
-        float moodPercentage = (float)currentMood / maxMood;
+        float moodPercentage = currentMood / maxMood;
         moodBarFill.size = new Vector2(needBarFillFullWidth * moodPercentage, moodBarFill.size.y);
 
         float hygienePercentage = (float)currentHygiene / maxHygiene;
