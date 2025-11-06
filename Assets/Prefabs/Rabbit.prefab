@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4154341709636165246}
   m_Layer: 0
   m_Name: MoodBarRoot
-  m_TagString: Untagged
+  m_TagString: NeedBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 1808242497623831883}
   m_Layer: 0
   m_Name: HungerBarRoot
-  m_TagString: Untagged
+  m_TagString: NeedBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 418935211582212649}
   m_Layer: 0
   m_Name: HygieneBarRoot
-  m_TagString: Untagged
+  m_TagString: NeedBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -691,6 +691,7 @@ MonoBehaviour:
   needSystem: {fileID: 2393840955734138149}
   selectionCircle: {fileID: 0}
   animator: {fileID: 0}
+  needBarsRoot: {fileID: 0}
   canBeFed: 1
 --- !u!114 &2393840955734138149
 MonoBehaviour:

@@ -104,6 +104,7 @@ public class TimeManager : MonoBehaviour
     {
         currentDayStr = GetMonthName() + " " + currentDay.ToString();
         ReleaseDay();
+
     }
 
     private void Update()
@@ -148,7 +149,7 @@ public class TimeManager : MonoBehaviour
                 counter++;
                 if (currentTimestampIndex != -1)
                 {
-                    string countdownString = "new rabbit in: " + (timestamps[currentTimestampIndex] - counter).ToString();
+                    string countdownString = "New bunny in: " + (timestamps[currentTimestampIndex] - counter).ToString();
                     countdownText.text = countdownString;
 
                     if (counter == timestamps[currentTimestampIndex])
@@ -157,7 +158,9 @@ public class TimeManager : MonoBehaviour
                         if (currentTimestampIndex == timestamps.Count)
                             currentTimestampIndex = -1;
 
-                        RabbitManager.Instance.GenerateNewRabbit();
+                        // add notification to add a rabbit later
+                        //RabbitManager.Instance.GenerateNewRabbit();
+                        NotificationManager.Instance.AddNotification(null, true);
 
                     }
                 }

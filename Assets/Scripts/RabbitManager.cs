@@ -60,7 +60,7 @@ public class RabbitManager : MonoBehaviour
         }
     }
 
-    public void GenerateNewRabbit()
+    public void GenerateNewRabbit(RabbitStats rabbitStats)
     {
 
         GameObject rabbit = Instantiate(rabbitPrefab, transform);
@@ -73,6 +73,7 @@ public class RabbitManager : MonoBehaviour
         newRabbit.SetName(newName);
         rabbit.name = newName;
         
+        newRabbit.SetNeedSystemMultipliers(rabbitStats.hungerRate, rabbitStats.moodRate, rabbitStats.hygieneRate);
         newRabbit.SetNeedSystemMultipliers(UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f));
         newRabbit.SetPausedStatus(false);
 
@@ -82,8 +83,8 @@ public class RabbitManager : MonoBehaviour
 
     void Start()
     {
-        GenerateNewRabbit();
-        GenerateNewRabbit();
+        //GenerateNewRabbit();
+        //GenerateNewRabbit();
     }
 
     void Update()

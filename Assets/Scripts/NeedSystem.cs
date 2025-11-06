@@ -175,7 +175,7 @@ public class NeedSystem : MonoBehaviour
     }
     // Конец чистоты
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         float hungerPercentage = currentHunger / maxHunger;
         hungerBarFill.size = new Vector2(needBarFillFullWidth * hungerPercentage, hungerBarFill.size.y);
