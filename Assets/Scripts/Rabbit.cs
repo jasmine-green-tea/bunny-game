@@ -23,7 +23,7 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     //public string rabbitName = "Кролик";
     [SerializeField] private string rabbitName;
     public NeedSystem needSystem;
-    private RabbitStats rabbitStats;
+    public RabbitStats rabbitStats;
 
     [Header("Визуальные элементы")]
     public GameObject selectionCircle;

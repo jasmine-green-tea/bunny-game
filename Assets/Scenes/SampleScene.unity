@@ -1273,7 +1273,7 @@ MonoBehaviour:
   countdownText: {fileID: 715844625}
   dayTimeSeconds: 60
   dayHourStart: 8
-  maxRabbitsPerDay: 3
+  maxRabbitsPerDay: 10
 --- !u!114 &698861468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2899,7 +2899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1488427998
 RectTransform:
   m_ObjectHideFlags: 0

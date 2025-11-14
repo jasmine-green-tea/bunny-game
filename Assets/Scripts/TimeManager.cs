@@ -143,6 +143,8 @@ public class TimeManager : MonoBehaviour
         ui.SetActive(false);
         bellButton.interactable = true;
         RabbitManager.Instance.SetRabbitsPause(false);
+        countdownText.gameObject.SetActive(true);
+
         timerCoroutine = StartCoroutine(DayTimerCoroutine());
     }
 

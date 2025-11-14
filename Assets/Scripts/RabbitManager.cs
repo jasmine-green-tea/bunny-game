@@ -68,11 +68,14 @@ public class RabbitManager : MonoBehaviour
        
         Rabbit newRabbit = rabbit.GetComponent<Rabbit>();
 
+        newRabbit.rabbitStats = rabbitStats;
+
         // Random generation of rabbit stats
-        string newName = "Кролик " + UnityEngine.Random.Range(0, 100).ToString();
-        newRabbit.SetName(newName);
-        rabbit.name = newName;
+        newRabbit.SetName(rabbitStats.bunnyName);
+        rabbit.name = rabbitStats.bunnyName;
         
+        
+
         newRabbit.SetNeedSystemMultipliers(rabbitStats.hungerRate, rabbitStats.moodRate, rabbitStats.hygieneRate);
         newRabbit.SetNeedSystemMultipliers(UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f), UnityEngine.Random.Range(0.5f, 3f));
         newRabbit.SetPausedStatus(false);
