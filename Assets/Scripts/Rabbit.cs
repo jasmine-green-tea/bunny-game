@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -107,6 +108,8 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
         ActionMenuManager.Instance.ShowActionMenu(this);
 
+        StartCoroutine(WaitForMenus());
+
         // Показываем, скрываем круг выделения
         //ToggleSelection();
     }
@@ -155,10 +158,7 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
 
             isInteracted = false;
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
+
 
             // Анимация
 
@@ -169,6 +169,18 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     void Update()
     {
-        
+
+    }
+
+    IEnumerator WaitForMenus()
+    {
+        yield return new WaitWhile(() => isInteracted || MenuTracker.Instance.GetMenuStatus());
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        yield return null;
     }
 }
