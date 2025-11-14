@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using TMPro;
+using UnityEngine.UI;
 
 
 public class Notification
@@ -32,6 +33,8 @@ public class NotificationManager : MonoBehaviour
     private Notification currentNotification;
     private RabbitStats currentRabbitStats;
 
+    [SerializeField] private List<InventoryItem> inventoryItemsDB = new List<InventoryItem>();
+    [SerializeField] private List<string> BunnyNameDB = new List<string>();
     private void Awake()
     {
         if (Instance == null)
@@ -64,6 +67,8 @@ public class NotificationManager : MonoBehaviour
         currentNotification = notifications[0];
         // show the head of the list notification
 
+        TimeManager.Instance.SetPaused(true);
+
         if (currentNotification.newRabbit)
         {
             // show an accept/decline form
@@ -73,11 +78,26 @@ public class NotificationManager : MonoBehaviour
             newRabbitStats.hungerRate = UnityEngine.Random.Range(0.5f, 3f);
             newRabbitStats.moodRate = UnityEngine.Random.Range(0.5f, 3f);
             newRabbitStats.hygieneRate = UnityEngine.Random.Range(0.5f, 3f);
-            // fill favourite/hated lists
+
+            int liked_index = Random.Range(0, inventoryItemsDB.Count-1);
+            Debug.Log(inventoryItemsDB.Count);
+
+            newRabbitStats.likedItem = inventoryItemsDB[liked_index];
+            int disliked_index = (liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count;
+            newRabbitStats.dislikedItem = inventoryItemsDB[(liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count];
+            newRabbitStats.bunnyName = BunnyNameDB[Random.Range(0, BunnyNameDB.Count)];
+
+
+
 
             currentRabbitStats = newRabbitStats;
 
             applicationForm.SetActive(true);
+
+            applicationForm.transform.GetChild(0).Find("LikedFrame").Find("LikedItem").GetComponent<Image>().sprite = newRabbitStats.likedItem.itemIcon;
+            applicationForm.transform.GetChild(0).Find("DislikedFrame").Find("DislikedItem").GetComponent<Image>().sprite = newRabbitStats.dislikedItem.itemIcon;
+            applicationForm.transform.GetChild(0).Find("BunnyName").GetComponent<TMP_Text>().text = newRabbitStats.bunnyName;
+
             // fill data with rabbit stats
         }
         else
@@ -112,6 +132,8 @@ public class NotificationManager : MonoBehaviour
 
         if (notifications.Count == 0)
             notificationKnob.SetActive(false);
+        TimeManager.Instance.SetPaused(false);
+
 
     }
 
@@ -129,6 +151,8 @@ public class NotificationManager : MonoBehaviour
 
         if (notifications.Count == 0)
             notificationKnob.SetActive(false);
+        TimeManager.Instance.SetPaused(false);
+
 
     }
 

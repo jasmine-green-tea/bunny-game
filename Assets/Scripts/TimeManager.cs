@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Diagnostics.Tracing;
+using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField]
     private GameObject ui;
+    [SerializeField]
+    private Button bellButton;
     [SerializeField]
     private TMP_Text timeText;
     [SerializeField]
@@ -35,6 +38,8 @@ public class TimeManager : MonoBehaviour
     private string currentDayStr;
 
     private Coroutine timerCoroutine;
+
+    private bool paused = false;
 
     private string GetMonthName()
     {
@@ -102,6 +107,8 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        if (Instance == null)
+            Instance = this;
         currentDayStr = GetMonthName() + " " + currentDay.ToString();
         ReleaseDay();
 
@@ -116,7 +123,6 @@ public class TimeManager : MonoBehaviour
     {
 
         int currentDayRabbits = UnityEngine.Random.Range(maxRabbitsPerDay / 2, maxRabbitsPerDay);
-        Debug.Log("rabbits count = " + currentDayRabbits);
 
         if (currentDayRabbits > 0)
         {
@@ -126,16 +132,23 @@ public class TimeManager : MonoBehaviour
             for (int i = 0; i < currentDayRabbits; i++)
             {
                 timestamps.Add((i+1) * ((int)dayTimeSeconds / (currentDayRabbits + 1)));
-                Debug.Log("added timestamp: " + (i + 1) * ((int)dayTimeSeconds / (currentDayRabbits + 1)));
+                //Debug.Log("added timestamp: " + (i + 1) * ((int)dayTimeSeconds / (currentDayRabbits + 1)));
             }
 
             currentTimestampIndex = 0;
+            counter = 0;
         }
        
 
         ui.SetActive(false);
+        bellButton.interactable = true;
         RabbitManager.Instance.SetRabbitsPause(false);
         timerCoroutine = StartCoroutine(DayTimerCoroutine());
+    }
+
+    public void SetPaused(bool paused)
+    {
+        this.paused = paused;
     }
 
     private IEnumerator DayTimerCoroutine()
@@ -146,6 +159,11 @@ public class TimeManager : MonoBehaviour
             {
                 timeText.text = (dayHourStart + i).ToString() + ":" + (j > 9 ? j.ToString() : "0" + j.ToString());
                 yield return new WaitForSeconds(1);
+                while (paused) 
+                {
+                    yield return new WaitWhile(() => paused);
+                }
+                ;
                 counter++;
                 if (currentTimestampIndex != -1)
                 {
@@ -156,10 +174,11 @@ public class TimeManager : MonoBehaviour
                     {
                         currentTimestampIndex++;
                         if (currentTimestampIndex == timestamps.Count)
+                        {
                             currentTimestampIndex = -1;
+                            countdownText.gameObject.SetActive(false);
+                        }
 
-                        // add notification to add a rabbit later
-                        //RabbitManager.Instance.GenerateNewRabbit();
                         NotificationManager.Instance.AddNotification(null, true);
 
                     }
@@ -173,6 +192,8 @@ public class TimeManager : MonoBehaviour
 
         Debug.Log(currentDayStr);
         ui.SetActive(true);
+        bellButton.interactable = false;
+
 
         if (currentDay + 1 > GetMaxMonthDays())
         {

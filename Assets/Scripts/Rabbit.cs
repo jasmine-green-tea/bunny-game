@@ -5,11 +5,15 @@ using UnityEngine.EventSystems;
 
 public class RabbitStats
 {
+    public string bunnyName;
     public float hungerRate;
     public float moodRate;
     public float hygieneRate;
-    public List<InventoryItem> favouriteItems;
-    public List<InventoryItem> hatedItems;
+    public InventoryItem likedItem;
+    public InventoryItem dislikedItem;
+
+    //public List<InventoryItem> likedItems = new List<InventoryItem>();
+    //public List<InventoryItem> dislikedItems = new List<InventoryItem>();
 
 }
 
@@ -127,15 +131,23 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         if (needSystem != null && inventoryItem != null)
         {
             // здесь возможно будут анимации на определенное поведение
+
+            float multiplier = 1f;
+
+            if (inventoryItem == rabbitStats.likedItem)
+                multiplier = 1.5f;
+            if (inventoryItem == rabbitStats.dislikedItem)
+                multiplier = 0.75f;
+
             switch (inventoryItem.itemType)
             {
                 case ItemType.Food:
-                    needSystem.IncreaseHunger(inventoryItem.restoreValue);
+                    needSystem.IncreaseHunger((int)(inventoryItem.restoreValue*multiplier));
                     //Debug.Log($"{rabbitName} покормлен на {inventoryItem.itemName}!");
 
                     break;
                 case ItemType.Toy:
-                    needSystem.IncreaseMood(inventoryItem.restoreValue);
+                    needSystem.IncreaseMood((int)(inventoryItem.restoreValue * multiplier));
                     //Debug.Log($"{rabbitName} поигран на {inventoryItem.itemName}!");
 
                     break;
