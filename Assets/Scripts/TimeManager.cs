@@ -169,7 +169,7 @@ public class TimeManager : MonoBehaviour
                 counter++;
                 if (currentTimestampIndex != -1)
                 {
-                    string countdownString = "New bunny in: " + (timestamps[currentTimestampIndex] - counter).ToString();
+                    string countdownString = "Новый кролик через: " + (timestamps[currentTimestampIndex] - counter).ToString();
                     countdownText.text = countdownString;
 
                     if (counter == timestamps[currentTimestampIndex])

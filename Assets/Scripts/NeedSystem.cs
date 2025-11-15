@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,8 @@ public class NeedSystem : MonoBehaviour
     public float currentHygiene = 100f;
     public float hygieneDecreaseRate = 1f; // На сколько уменьшается чистоты в секунду
     public float hygieneDecreaseInterval = 0.3f; // Интервал уменьшения чистоты в секундах
+    public int hygieneIncreaseRate = 1;
+    public int maxDirtPiles = 5;
 
     [Header("UI элементы")]
     public Color fullColor = Color.green;
@@ -40,6 +43,8 @@ public class NeedSystem : MonoBehaviour
     public SpriteRenderer hygieneBarFill;
 
 
+
+
     [Header("Статус кролика")]
     public bool isStarving = false;
     public bool isSad = false;
@@ -47,6 +52,11 @@ public class NeedSystem : MonoBehaviour
     private float hungerTimer;
     private float moodTimer;
     private float hygieneTimer;
+
+    public RabbitController rabbitController;
+
+    private List<DirtPile> dirtPiles;
+    
 
     public void Pause(bool paused)
     {
@@ -56,7 +66,7 @@ public class NeedSystem : MonoBehaviour
     void Start()
     {
         rabbit = GetComponent<Rabbit>();
-
+        dirtPiles = new List<DirtPile>();
         currentHunger = maxHunger;
         currentMood = maxMood;
         UpdateUI();
@@ -85,9 +95,8 @@ public class NeedSystem : MonoBehaviour
     {
         currentHunger += amount;
         currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
-
-        if (currentHunger > 20)
-            isStarving = false;
+        rabbitController.isEating = true;
+        rabbitController.pausedForInteraction = true;
 
         CheckStarvation();
         UpdateUI();
@@ -95,13 +104,15 @@ public class NeedSystem : MonoBehaviour
     
     private void CheckStarvation()
     {
-        if (currentHunger <= 10)
+        if (currentHunger <= 20)
         {
             isStarving = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} голодает! Накормите кролика!");
             // Добавить визуальные эффекты и логику поведения голодного кролика
         }
+        else
+            isStarving = false;
     }
     // Конец голода
 
@@ -122,8 +133,6 @@ public class NeedSystem : MonoBehaviour
         currentMood += amount;
         currentMood = Mathf.Clamp(currentMood, 0, maxMood);
 
-        if (currentMood > 20)
-            isSad = false;
 
         CheckMood();
         UpdateUI();
@@ -131,12 +140,14 @@ public class NeedSystem : MonoBehaviour
 
     private void CheckMood()
     {
-        if (currentMood <= 10)
+        if (currentMood <= 20)
         {
             isSad = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} грустит! Поиграйте с кроликом!");
         }
+        else
+            isSad = false;
     }
     // Конец настроения
 
@@ -145,11 +156,20 @@ public class NeedSystem : MonoBehaviour
     {
         if (paused)
             return;
-        currentHygiene -= amount;
-        currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
 
-        CheckHygiene();
-        UpdateUI();
+        float newAmount = amount * (dirtPiles.Count / (float)maxDirtPiles);
+        if (newAmount > 0)
+        {
+
+            currentHygiene -= newAmount;
+            currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
+
+            CheckHygiene();
+            UpdateUI();
+        }
+        else
+            IncreaseHygiene(hygieneIncreaseRate);
+        
     }
 
     public void IncreaseHygiene(int amount)
@@ -157,23 +177,28 @@ public class NeedSystem : MonoBehaviour
         currentHygiene += amount;
         currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);
 
-        if (currentHygiene > 20)
-            isDirty = false;
-
         CheckHygiene();
         UpdateUI();
     }
 
     private void CheckHygiene()
     {
-        if (currentHygiene <= 10)
+        if (currentHygiene <= 20)
         {
-            isSad = true;
+            isDirty = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} не любит быть в грязи! Прибиритесь!");
         }
+        else
+            isDirty = false;
+
     }
     // Конец чистоты
+
+    public bool GetIsSad()
+    {
+        return isSad || isStarving || isDirty;
+    }
 
     public void UpdateUI()
     {
@@ -245,5 +270,24 @@ public class NeedSystem : MonoBehaviour
 
             hygieneBarFill.color = zeroColor * (1 - currentRate) + lowColor * (currentRate);
         }
+    }
+
+    public void AddDirtPile(DirtPile other)
+    {
+
+        if (!dirtPiles.Contains(other))
+            dirtPiles.Add(other);
+
+
+    }
+
+    public void RemoveDirtPile(DirtPile other)
+    {
+
+
+        if (dirtPiles.Contains(other))
+            dirtPiles.Remove(other);
+
+
     }
 }
