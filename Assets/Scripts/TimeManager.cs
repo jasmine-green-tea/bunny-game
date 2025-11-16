@@ -169,7 +169,7 @@ public class TimeManager : MonoBehaviour
                 counter++;
                 if (currentTimestampIndex != -1)
                 {
-                    string countdownString = "New bunny in: " + (timestamps[currentTimestampIndex] - counter).ToString();
+                    string countdownString = "Новый кролик через: " + (timestamps[currentTimestampIndex] - counter).ToString();
                     countdownText.text = countdownString;
 
                     if (counter == timestamps[currentTimestampIndex])
@@ -192,7 +192,7 @@ public class TimeManager : MonoBehaviour
         // set a flag to all bunnies to prevent them from losing stats
         RabbitManager.Instance.SetRabbitsPause(true);
 
-        Debug.Log(currentDayStr);
+        //Debug.Log(currentDayStr);
         ui.SetActive(true);
         bellButton.interactable = false;
 

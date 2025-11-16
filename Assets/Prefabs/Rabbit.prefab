@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4154341709636165246}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoodBarRoot
   m_TagString: NeedBar
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5785539594830715327}
   - component: {fileID: 8542568463920550490}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HygieneIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1808242497623831883}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HungerBarRoot
   m_TagString: NeedBar
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2503945914975378787}
   - component: {fileID: 4407314059982419089}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HygieneFillBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4232578902017809681}
   - component: {fileID: 3652343202519357937}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoodBarFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,7 +338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1727600522654952678}
   - component: {fileID: 4009791763565222046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HungerFillBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4898983747942077082}
   - component: {fileID: 2804892567601783269}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HungerBarFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418935211582212649}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HygieneBarRoot
   m_TagString: NeedBar
   m_Icon: {fileID: 0}
@@ -544,14 +544,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1758645408346730407}
+  - component: {fileID: 2617146469211793788}
   - component: {fileID: 1585233548845092072}
   - component: {fileID: 2559390795496687198}
   - component: {fileID: 3198968587020360531}
   - component: {fileID: 2393840955734138149}
   - component: {fileID: 1317530862914949545}
-  m_Layer: 0
+  - component: {fileID: 4216158186680639656}
+  - component: {fileID: 693254841881125918}
+  m_Layer: 9
   m_Name: Rabbit
-  m_TagString: Untagged
+  m_TagString: Bunny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -578,6 +581,29 @@ RectTransform:
   m_AnchoredPosition: {x: -2.915, y: 6.7425}
   m_SizeDelta: {x: 3.3, y: 4.85}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &2617146469211793788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3798920438035955892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f276fb2a877a6a47a74b3d660ffa4ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementDirection: {x: 0, y: 0}
+  directionUpdatePeriodSeconds: 2
+  pausedForInteraction: 0
+  movementSpeed: 0.36
+  animator: {fileID: 4216158186680639656}
+  spriteRenderer: {fileID: 1585233548845092072}
+  animatorSpeed: 1.7
+  needSystem: {fileID: 2393840955734138149}
+  isEating: 0
+  isPlaying: 0
+  rb: {fileID: 693254841881125918}
 --- !u!212 &1585233548845092072
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -619,7 +645,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 862e43d6e0eed994f987d30091706cf8, type: 3}
+  m_Sprite: {fileID: 1797351634, guid: cff54713d49e1b6439c5b4572fe3ebdc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -662,18 +688,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.7}
+  m_Offset: {x: 0, y: -0.33}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.3, y: 4.85}
+    oldSize: {x: 2.56, y: 2.56}
     newSize: {x: 0.2, y: 0.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.61, y: 3.06}
+  m_Size: {x: 2.61, y: 2.05}
   m_EdgeRadius: 0
 --- !u!114 &3198968587020360531
 MonoBehaviour:
@@ -691,7 +717,6 @@ MonoBehaviour:
   needSystem: {fileID: 2393840955734138149}
   selectionCircle: {fileID: 0}
   animator: {fileID: 0}
-  needBarsRoot: {fileID: 0}
   canBeFed: 1
 --- !u!114 &2393840955734138149
 MonoBehaviour:
@@ -717,6 +742,8 @@ MonoBehaviour:
   currentHygiene: 100
   hygieneDecreaseRate: 1
   hygieneDecreaseInterval: 0.3
+  hygieneIncreaseRate: 1
+  maxDirtPiles: 5
   fullColor: {r: 0.6784314, g: 0.8352941, b: 0.4862745, a: 1}
   mediumColor: {r: 0.95686275, g: 0.827451, b: 0.4, a: 1}
   lowColor: {r: 0.95686275, g: 0.41960785, b: 0.4, a: 1}
@@ -731,6 +758,7 @@ MonoBehaviour:
   isStarving: 0
   isSad: 0
   isDirty: 0
+  rabbitController: {fileID: 2617146469211793788}
 --- !u!114 &1317530862914949545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,6 +779,54 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!95 &4216158186680639656
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3798920438035955892}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fd09a41e9743c584e8bcc0f85839fb03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!50 &693254841881125918
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3798920438035955892}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &4211928829185151680
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,7 +837,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2990611298976020161}
   - component: {fileID: 890588218555140829}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HygieneFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,7 +921,7 @@ GameObject:
   m_Component:
   - component: {fileID: 270183491756142899}
   - component: {fileID: 7056195870699825321}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoodIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -929,7 +1005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3786082651218401249}
   - component: {fileID: 3704105543144507773}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HungerFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,7 +1089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 746411310916895960}
   - component: {fileID: 8033687304020435417}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoodFillBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1097,7 +1173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6169153363079863561}
   - component: {fileID: 8560173302225970593}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HungerIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1181,7 +1257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 991189324744576040}
   - component: {fileID: 3373125274665574341}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoodFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 654049119238629052}
   - component: {fileID: 5878679776428158727}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HygieneBarFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -56,7 +56,7 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         needSystem.hungerDecreaseRate = hungerRate;
         needSystem.moodDecreaseRate = moodRate;
         needSystem.hygieneDecreaseRate = hygieneRate;
-
+        needSystem.hygieneIncreaseRate = (int)Mathf.Ceil(hygieneRate);
 
     }
 
