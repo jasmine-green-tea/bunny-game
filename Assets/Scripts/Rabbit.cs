@@ -12,6 +12,7 @@ public class RabbitStats
     public float hygieneRate;
     public InventoryItem likedItem;
     public InventoryItem dislikedItem;
+    public BunnyColor bunnyColor;
 
     //public List<InventoryItem> likedItems = new List<InventoryItem>();
     //public List<InventoryItem> dislikedItems = new List<InventoryItem>();
@@ -28,13 +29,18 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     [Header("Визуальные элементы")]
     public GameObject selectionCircle;
-    public Animator animator;
 
     [Header("Действия")]
     public bool canBeFed = true;
     // Другие действия
 
     private bool isInteracted = false;
+    public RabbitController controller;
+
+    public void SetControllerColor()
+    {
+        controller.SetBunnyColor((int)rabbitStats.bunnyColor);
+    }
 
     public void SetPausedStatus(bool paused)
     {

@@ -35,6 +35,8 @@ public class NotificationManager : MonoBehaviour
 
     [SerializeField] private List<InventoryItem> inventoryItemsDB = new List<InventoryItem>();
     [SerializeField] private List<string> BunnyNameDB = new List<string>();
+
+    public Sprite[] rabbitSprites;
     private void Awake()
     {
         if (Instance == null)
@@ -78,6 +80,7 @@ public class NotificationManager : MonoBehaviour
             newRabbitStats.hungerRate = UnityEngine.Random.Range(0.5f, 3f);
             newRabbitStats.moodRate = UnityEngine.Random.Range(0.5f, 3f);
             newRabbitStats.hygieneRate = UnityEngine.Random.Range(5 + 3f*0.5f,5 + 3f*3f);
+            newRabbitStats.bunnyColor = (BunnyColor)UnityEngine.Random.Range((int)BunnyColor.Orange, (int)BunnyColor.MaxColors);
 
             int liked_index = Random.Range(0, inventoryItemsDB.Count-1);
 
@@ -96,6 +99,8 @@ public class NotificationManager : MonoBehaviour
             applicationForm.transform.GetChild(0).Find("LikedFrame").Find("LikedItem").GetComponent<Image>().sprite = newRabbitStats.likedItem.itemIcon;
             applicationForm.transform.GetChild(0).Find("DislikedFrame").Find("DislikedItem").GetComponent<Image>().sprite = newRabbitStats.dislikedItem.itemIcon;
             applicationForm.transform.GetChild(0).Find("BunnyName").GetComponent<TMP_Text>().text = newRabbitStats.bunnyName;
+            applicationForm.transform.GetChild(0).Find("BunnySprite").GetComponent<Image>().sprite = rabbitSprites[(int)newRabbitStats.bunnyColor];
+
 
             // fill data with rabbit stats
         }

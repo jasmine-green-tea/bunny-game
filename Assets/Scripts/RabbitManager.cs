@@ -69,6 +69,7 @@ public class RabbitManager : MonoBehaviour
         Rabbit newRabbit = rabbit.GetComponent<Rabbit>();
 
         newRabbit.rabbitStats = rabbitStats;
+        newRabbit.SetControllerColor();
 
         // Random generation of rabbit stats
         newRabbit.SetName(rabbitStats.bunnyName);

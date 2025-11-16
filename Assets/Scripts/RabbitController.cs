@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public enum BunnyColor
+{
+    Orange = 0,
+    Gray = 1,
+    MaxColors
+}
+
 public class RabbitController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -25,6 +32,7 @@ public class RabbitController : MonoBehaviour
     public float movementSpeed = 2.0f;
 
     public Animator animator;
+    public RuntimeAnimatorController[] colorControllers;
     public SpriteRenderer spriteRenderer;
     public float animatorSpeed = 1f;
 
@@ -58,10 +66,13 @@ public class RabbitController : MonoBehaviour
         UpdateFlipOrientation();
     }
 
+    public void SetBunnyColor(int colorIndex)
+    {
+        animator.runtimeAnimatorController = colorControllers[colorIndex];
+    }
+
     private void UpdateFlipOrientation()
     {
-        Debug.Log(rb.velocity);
-
 
         if (rb.velocity.x < 0 && movementDirection.magnitude > 0)
             spriteRenderer.flipX = true;
