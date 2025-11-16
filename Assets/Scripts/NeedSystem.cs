@@ -96,7 +96,7 @@ public class NeedSystem : MonoBehaviour
         currentHunger += amount;
         currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
         rabbitController.isEating = true;
-        rabbitController.pausedForInteraction = true;
+        //rabbitController.pausedForInteraction = true;
 
         CheckStarvation();
         UpdateUI();
@@ -168,11 +168,11 @@ public class NeedSystem : MonoBehaviour
             UpdateUI();
         }
         else
-            IncreaseHygiene(hygieneIncreaseRate);
+            IncreaseHygiene(amount);
         
     }
 
-    public void IncreaseHygiene(int amount)
+    public void IncreaseHygiene(float amount)
     {
         currentHygiene += amount;
         currentHygiene = Mathf.Clamp(currentHygiene, 0, maxHygiene);

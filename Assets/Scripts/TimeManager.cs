@@ -192,7 +192,7 @@ public class TimeManager : MonoBehaviour
         // set a flag to all bunnies to prevent them from losing stats
         RabbitManager.Instance.SetRabbitsPause(true);
 
-        Debug.Log(currentDayStr);
+        //Debug.Log(currentDayStr);
         ui.SetActive(true);
         bellButton.interactable = false;
 

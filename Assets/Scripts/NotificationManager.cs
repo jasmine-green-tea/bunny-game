@@ -80,7 +80,6 @@ public class NotificationManager : MonoBehaviour
             newRabbitStats.hygieneRate = UnityEngine.Random.Range(5 + 3f*0.5f,5 + 3f*3f);
 
             int liked_index = Random.Range(0, inventoryItemsDB.Count-1);
-            Debug.Log(inventoryItemsDB.Count);
 
             newRabbitStats.likedItem = inventoryItemsDB[liked_index];
             int disliked_index = (liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count;

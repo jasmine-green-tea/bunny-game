@@ -8,6 +8,16 @@ public class RabbitController : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    private enum RabbitAnimationState
+    {
+        Idle,
+        Moving,
+        Eating,
+        Playing,
+        Sad
+    }
+
+
     public Vector2 movementDirection;
     [SerializeField]
     private float directionUpdatePeriodSeconds;
@@ -21,13 +31,19 @@ public class RabbitController : MonoBehaviour
     public NeedSystem needSystem;
     public bool isEating = false;
     public bool isPlaying = false;
+    public bool isSad = false;
 
     public Rigidbody2D rb;
+
+    private RabbitAnimationState currentState = RabbitAnimationState.Idle;
+
+    private float animationEndTime = 0f;
+    private bool isAnimationForced = false;
+
 
     private void Start()
     {
         StartCoroutine(DirectionPickerCoroutine());
-        StartCoroutine(WaitToConsume());
     }
 
     private void Update()
@@ -35,87 +51,116 @@ public class RabbitController : MonoBehaviour
         animator.speed = animatorSpeed;
         //transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
         rb.velocity = movementDirection * movementSpeed;
+
+        isSad = needSystem.GetIsSad();
+
+        UpdateAnimationState();
+        UpdateFlipOrientation();
     }
 
+    private void UpdateFlipOrientation()
+    {
+        Debug.Log(rb.velocity);
+
+
+        if (rb.velocity.x < 0 && movementDirection.magnitude > 0)
+            spriteRenderer.flipX = true;
+        if (rb.velocity.x > 0 && movementDirection.magnitude > 0)
+            spriteRenderer.flipX = false;
+
+    }
+    private void UpdateAnimationState()
+    {
+        if (isAnimationForced && Time.time < animationEndTime)
+            return;
+        else if (isAnimationForced && Time.time >= animationEndTime)
+        {
+            isAnimationForced = false;
+            isEating = false;
+            isPlaying = false;
+        }
+
+
+            RabbitAnimationState newState = DetermineAnimationState();
+
+        if (newState != currentState)
+        {
+            currentState = newState;
+            PlayStateAnimation(newState);
+        }
+    }
+
+    private RabbitAnimationState DetermineAnimationState()
+    {
+        // Define clear priorities (highest to lowest)
+        if (isEating) return RabbitAnimationState.Eating;
+        if (isPlaying) return RabbitAnimationState.Playing;
+        if (isSad) return RabbitAnimationState.Sad;
+        if (movementDirection != Vector2.zero) return RabbitAnimationState.Moving;
+        return RabbitAnimationState.Idle;
+    }
+
+    private void PlayStateAnimation(RabbitAnimationState state)
+    {
+        switch (state)
+        {
+            case RabbitAnimationState.Sad:
+                animator.Play("sad");
+                movementDirection = Vector2.zero;
+                break;
+            case RabbitAnimationState.Eating:
+                animator.Play("eat");
+                movementDirection = Vector2.zero;
+                StartForcedAnimation(3f);
+                break;
+            case RabbitAnimationState.Playing:
+                // animator.Play("play");
+                movementDirection = Vector2.zero;
+                StartForcedAnimation(3f);
+                break;
+            case RabbitAnimationState.Moving:
+                animator.Play("walkRight");
+                // Handle sprite flipping
+                //if (movementDirection.x < -0.1f) spriteRenderer.flipX = true;
+                //else if (movementDirection.x > 0.1f) spriteRenderer.flipX = false;
+                break;
+            case RabbitAnimationState.Idle:
+                animator.Play("idle");
+                break;
+        }
+    }
+
+    private void StartForcedAnimation(float duration)
+    {
+        isAnimationForced = true;
+        animationEndTime = Time.time + duration;
+    }
 
     IEnumerator DirectionPickerCoroutine()
     {
         while (true)
         {
-            while (pausedForInteraction)
-                yield return null;
+            yield return new WaitWhile(() => ShouldPauseMovement());
 
-
-            int x = UnityEngine.Random.Range(-1, 2);
-            int y = UnityEngine.Random.Range(-1, 2);
-
-            if (x == 0 && y != 0)
-                y = 0;
-
-            bool isSad = needSystem.GetIsSad();
-
-
-
-            if (isSad)
+            // Only pick direction if we're allowed to move
+            if (!ShouldPauseMovement())
             {
-                animator.Play("sad");
-                x = 0;
-                y = 0;
-            }
-            else
-            {
+                int x = UnityEngine.Random.Range(-1, 2);
+                int y = UnityEngine.Random.Range(-1, 2);
 
-                if ((x == 0) && (y == 0))
-                    animator.Play("idle");
-                else
-                    animator.Play("walkRight");
-
-                if (x < 0)
-                    spriteRenderer.flipX = true;
-                else if (x > 0)
-                    spriteRenderer.flipX = false;
+                if (x == 0)
+                    y = 0;
+                movementDirection = new Vector2(x, y);
             }
 
-            movementDirection = new Vector2(x, y);
-
-
-
-            float multiplier = 1;
-            if (movementDirection.magnitude == 0)
-                multiplier = 4;
-            if (isEating)
-                multiplier = 1.5f;
+            float multiplier = (movementDirection.magnitude == 0) ? 2 : 1;
             yield return new WaitForSeconds(directionUpdatePeriodSeconds * multiplier);
         }
-
-
-        yield return null;
     }
 
-    IEnumerator WaitToConsume()
+    private bool ShouldPauseMovement()
     {
-        while (true)
-        {
-            yield return new WaitUntil(() => (isEating || isPlaying));
-
-            if (isEating)
-                animator.Play("eat");
-            //else if (isPlaying)
-                //animator.Play("play")
-
-
-            movementDirection = Vector2.zero;
-
-            yield return new WaitForSeconds(directionUpdatePeriodSeconds * 2.5f);
-
-            pausedForInteraction = false;
-            isEating = false;
-            isPlaying = false;
-
-        }
-
-
-        yield return null;
+        return isSad || isEating || isPlaying || pausedForInteraction || isAnimationForced;
     }
 
 
