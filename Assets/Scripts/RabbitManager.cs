@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class RabbitManager : MonoBehaviour
@@ -38,6 +39,7 @@ public class RabbitManager : MonoBehaviour
     {
         if (allRabbits.Contains(rabbit))
             allRabbits.Remove(rabbit);
+        Destroy(rabbit.gameObject);
     }
 
     // Сброс выделения у всех кроликов кроме указанного
@@ -57,6 +59,18 @@ public class RabbitManager : MonoBehaviour
         foreach (Rabbit rabbit in allRabbits)
         {
             rabbit.SetPausedStatus(paused);
+        }
+    }
+
+    public void DecreaseDays()
+    {
+        foreach (Rabbit rabbit in allRabbits)
+        {
+            rabbit.rabbitStats.currentDays--;
+            if (rabbit.rabbitStats.currentDays == 0)
+            {
+                NotificationManager.Instance.AddNotification(rabbit, false);
+            }
         }
     }
 

@@ -13,6 +13,8 @@ public class RabbitStats
     public InventoryItem likedItem;
     public InventoryItem dislikedItem;
     public BunnyColor bunnyColor;
+    public int daysLeft;
+    public int currentDays;
 
     //public List<InventoryItem> likedItems = new List<InventoryItem>();
     //public List<InventoryItem> dislikedItems = new List<InventoryItem>();
