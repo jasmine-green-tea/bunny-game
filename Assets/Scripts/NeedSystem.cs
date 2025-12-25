@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NeedSystem : MonoBehaviour
+public class NeedSystem : PausableObject
 {
     [SerializeField] private const float needBarFillFullWidth = 3.2f;
 
@@ -65,18 +65,23 @@ public class NeedSystem : MonoBehaviour
 
     void Start()
     {
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
+
         rabbit = GetComponent<Rabbit>();
         dirtPiles = new List<DirtPile>();
         currentHunger = maxHunger;
         currentMood = maxMood;
         UpdateUI();
+
+
     }
 
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
-        DecreaseHunger(hungerDecreaseRate * Time.deltaTime);
-        DecreaseMood(moodDecreaseRate * Time.deltaTime);
-        DecreaseHygiene(hygieneDecreaseRate * Time.deltaTime);
+        DecreaseHunger(hungerDecreaseRate * deltaTime);
+        DecreaseMood(moodDecreaseRate * deltaTime);
+        DecreaseHygiene(hygieneDecreaseRate * deltaTime);
     }
 
     // Голод

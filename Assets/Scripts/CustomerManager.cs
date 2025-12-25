@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CustomerManager : MonoBehaviour
+public class CustomerManager : PausableObject
 {
 
     public static CustomerManager Instance;

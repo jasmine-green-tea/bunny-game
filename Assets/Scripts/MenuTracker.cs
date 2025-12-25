@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuTracker : MonoBehaviour
+public class MenuTracker : PausableObject
 {
     public GameObject ActionMenuPanel;
     public GameObject InventoryPanel;

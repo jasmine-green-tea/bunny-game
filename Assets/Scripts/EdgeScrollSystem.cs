@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EdgeScrollSystem : MonoBehaviour
+public class EdgeScrollSystem : PausableObject
 {
     Vector3[] corners = new Vector3[4];
 
@@ -31,9 +31,12 @@ public class EdgeScrollSystem : MonoBehaviour
 
         cameraHeight = Camera.main.orthographicSize * 2f;
         cameraWidth = cameraHeight * Camera.main.aspect;
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
     }
 
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
 
         Vector2 inputDir = Vector2.zero;
@@ -62,7 +65,7 @@ public class EdgeScrollSystem : MonoBehaviour
 
         
 
-        cameraTransform.Translate(inputDir * Time.deltaTime * cameraSpeed);
+        cameraTransform.Translate(inputDir * deltaTime * cameraSpeed);
         float newX = cameraTransform.position.x;
         float newY = cameraTransform.position.y;
         if (cameraTransform.position.x > 3.9f)

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
-public class RabbitManager : MonoBehaviour
+public class RabbitManager : PausableObject
 {
     public static RabbitManager Instance;
 

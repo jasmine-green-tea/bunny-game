@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : PausableObject
 {
     public static InventoryManager Instance;
 

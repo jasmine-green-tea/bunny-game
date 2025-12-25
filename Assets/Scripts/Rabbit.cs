@@ -21,7 +21,7 @@ public class RabbitStats
 
 }
 
-public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Настройки кролика")]
     //public string rabbitName = "Кролик";
@@ -93,6 +93,9 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
         controller.forcedAnimationEvent.AddListener(DisableInteraction);
         controller.releaseAnimationEvent.AddListener(EnableInteraction);
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
 
         //RabbitManager.Instance.RegisterRabbit(this);
     }

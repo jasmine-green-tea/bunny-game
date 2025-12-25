@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : PausableObject
 {
     public static InventoryUI Instance;
 
@@ -27,6 +27,8 @@ public class InventoryUI : MonoBehaviour
     void Start()
     {
         inventoryPanel.SetActive(false);
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
     }
 
     // Показать инвентарь для кормления
@@ -95,7 +97,7 @@ public class InventoryUI : MonoBehaviour
         HideInventory();
     }
 
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
         // Скрывать инвентарь при клике вне его
         if (inventoryPanel.activeSelf && Input.GetMouseButtonDown(0))

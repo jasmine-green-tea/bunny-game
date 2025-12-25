@@ -4,7 +4,7 @@ using System;
 using Unity.VisualScripting;
 using TMPro;
 
-public class ItemButton : MonoBehaviour
+public class ItemButton : PausableObject
 {
     [Header("UI элементы")]
     public Image itemIcon;

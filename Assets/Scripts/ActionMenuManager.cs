@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class ActionMenuManager : MonoBehaviour
+public class ActionMenuManager : PausableObject
 {
     public static ActionMenuManager Instance;
 
@@ -27,7 +27,7 @@ public class ActionMenuManager : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    void Start()
+    private void Start()
     {
         // Настраиваем кнопки
         feedButton.onClick.AddListener(OnFeedClicked);
@@ -37,6 +37,9 @@ public class ActionMenuManager : MonoBehaviour
 
         // Скрываем меню при старте
         HideActionMenu();
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
     }
 
     // Показать меню действий для кролика
@@ -77,7 +80,7 @@ public class ActionMenuManager : MonoBehaviour
         HideActionMenu();
     }
 
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
         // Скрывать меню при клике вне его
         if (actionMenuPanel.activeSelf && Input.GetMouseButtonDown(0))
@@ -99,5 +102,11 @@ public class ActionMenuManager : MonoBehaviour
         EventSystem.current.RaycastAll(eventData, results);
 
         return results.Count > 0;
+    }
+
+    private void OnDestroy()
+    {
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.UnregisterPausable(this);
     }
 }

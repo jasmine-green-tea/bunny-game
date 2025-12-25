@@ -5,7 +5,7 @@ using TMPro;
 using System.Diagnostics.Tracing;
 using UnityEngine.UI;
 
-public class TimeManager : MonoBehaviour
+public class TimeManager : PausableObject
 {
 
     public static TimeManager Instance;
@@ -41,80 +41,27 @@ public class TimeManager : MonoBehaviour
 
     private bool paused = false;
 
-    private string GetMonthName()
+    private void Awake()
     {
-        switch (currentMonth)
-        {
-            case 1:
-                return "JAN";
-            case 2:
-                return "FEB";
-            case 3:
-                return "MAR";
-            case 4:
-                return "APR";
-            case 5:
-                return "MAY";
-            case 6:
-                return "JUN";
-            case 7:
-                return "JUL";
-            case 8:
-                return "AUG";
-            case 9:
-                return "SEP";
-            case 10:
-                return "OCT";
-            case 11:
-                return "NOV";
-            case 12:
-                return "DEC";
-        }
-        return "NaM";
-    }
-
-    private int GetMaxMonthDays()
-    {
-        switch (currentMonth)
-        {
-            case 1:
-                return 31;
-            case 2:
-                return 28;
-            case 3:
-                return 31;
-            case 4:
-                return 30;
-            case 5:
-                return 31;
-            case 6:
-                return 30;
-            case 7:
-                return 31;
-            case 8:
-                return 31;
-            case 9:
-                return 30;
-            case 10:
-                return 31;
-            case 11:
-                return 30;
-            case 12:
-                return 31;
-        }
-        return -1;
+        if (Instance == null)
+            Instance = this;
     }
 
     private void Start()
     {
-        if (Instance == null)
-            Instance = this;
+
         currentDayStr = GetMonthName() + " " + currentDay.ToString();
-        ReleaseDay();
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
+
+
+
+            ReleaseDay();
 
     }
 
-    private void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
 
     }
@@ -146,6 +93,11 @@ public class TimeManager : MonoBehaviour
         RabbitManager.Instance.DecreaseDays();
         countdownText.gameObject.SetActive(true);
 
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+        }
+
         timerCoroutine = StartCoroutine(DayTimerCoroutine());
     }
 
@@ -160,44 +112,54 @@ public class TimeManager : MonoBehaviour
         {
             for (int j = 0; j < 60; j++)
             {
+                // Update time display
                 timeText.text = (dayHourStart + i).ToString() + ":" + (j > 9 ? j.ToString() : "0" + j.ToString());
-                yield return new WaitForSeconds(1);
-                while (paused) 
-                {
-                    yield return new WaitWhile(() => paused);
-                }
-                ;
-                counter++;
-                if (currentTimestampIndex != -1)
-                {
-                    string countdownString = "Новый кролик через: " + (timestamps[currentTimestampIndex] - counter).ToString();
-                    countdownText.text = countdownString;
 
-                    if (counter == timestamps[currentTimestampIndex])
+                // Wait for one second, respecting pause state
+                float timer = 0f;
+                while (timer < 1f)
+                {
+                    if (!IsPaused)
                     {
-                        currentTimestampIndex++;
-                        if (currentTimestampIndex == timestamps.Count)
+                        timer += Time.deltaTime;
+                    }
+                    yield return null;
+                }
+
+                // Increment counter if not paused
+                if (!IsPaused)
+                {
+                    counter++;
+
+                    // Check for rabbit spawn timestamps
+                    if (currentTimestampIndex != -1)
+                    {
+                        string countdownString = "Следующий кролик через: " + (timestamps[currentTimestampIndex] - counter).ToString();
+                        countdownText.text = countdownString;
+
+                        if (counter == timestamps[currentTimestampIndex])
                         {
-                            currentTimestampIndex = -1;
-                            countdownText.gameObject.SetActive(false);
+                            currentTimestampIndex++;
+                            if (currentTimestampIndex == timestamps.Count)
+                            {
+                                currentTimestampIndex = -1;
+                                countdownText.gameObject.SetActive(false);
+                            }
+
+                            NotificationManager.Instance.AddNotification(null, true);
                         }
-
-                        NotificationManager.Instance.AddNotification(null, true);
-
                     }
                 }
             }
-
         }
 
-        // set a flag to all bunnies to prevent them from losing stats
+        // End of day - set a flag to all bunnies to prevent them from losing stats
         RabbitManager.Instance.SetRabbitsPause(true);
 
-        //Debug.Log(currentDayStr);
         ui.SetActive(true);
         bellButton.interactable = false;
 
-
+        // Advance to next day
         if (currentDay + 1 > GetMaxMonthDays())
         {
             currentDay = 1;
@@ -206,11 +168,86 @@ public class TimeManager : MonoBehaviour
                 currentMonth = 1;
         }
         else
+        {
             currentDay++;
+        }
 
         currentDayStr = GetMonthName() + " " + currentDay.ToString();
+    }
 
+    protected override void OnPaused()
+    {
 
-        yield return null;
+        // Optional: Update UI to show pause state
+        // You could change the time display color or add "PAUSED" text
+        if (countdownText.gameObject.activeSelf)
+        {
+            countdownText.text += " [Пауза]";
+        }
+    }
+
+    protected override void OnResumed()
+    {
+
+        // Optional: Remove pause indicator from UI
+        if (countdownText.gameObject.activeSelf && countdownText.text.Contains("[Пауза]"))
+        {
+            string currentText = countdownText.text;
+            countdownText.text = currentText.Replace(" [Пауза]", "");
+        }
+    }
+
+    private string GetMonthName()
+    {
+        switch (currentMonth)
+        {
+            case 1: return "JAN";
+            case 2: return "FEB";
+            case 3: return "MAR";
+            case 4: return "APR";
+            case 5: return "MAY";
+            case 6: return "JUN";
+            case 7: return "JUL";
+            case 8: return "AUG";
+            case 9: return "SEP";
+            case 10: return "OCT";
+            case 11: return "NOV";
+            case 12: return "DEC";
+        }
+        return "NaM";
+    }
+
+    private int GetMaxMonthDays()
+    {
+        switch (currentMonth)
+        {
+            case 1: return 31;
+            case 2: return 28;
+            case 3: return 31;
+            case 4: return 30;
+            case 5: return 31;
+            case 6: return 30;
+            case 7: return 31;
+            case 8: return 31;
+            case 9: return 30;
+            case 10: return 31;
+            case 11: return 30;
+            case 12: return 31;
+        }
+        return -1;
+    }
+
+    // Clean up coroutine
+    private void OnDestroy()
+    {
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+        }
+
+        if (PauseManager.Instance != null)
+        {
+            PauseManager.Instance.UnregisterPausable(this);
+        }
     }
 }

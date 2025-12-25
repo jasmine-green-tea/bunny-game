@@ -4,14 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DirtPile : MonoBehaviour
+public class DirtPile : PausableObject
 {
     [SerializeField]
     private CircleCollider2D triggerCollider;
 
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
         
     }

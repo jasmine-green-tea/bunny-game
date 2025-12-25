@@ -2,31 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DirtSpawner : MonoBehaviour
+public class DirtSpawner : PausableObject
 {
     public GameObject dirtPrefab;
     public RectTransform spawnArea;
     public float spawnPeriodSeconds;
 
+    private float _currentTimer;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        StartCoroutine(SpawnCoroutine());
+        _currentTimer = 0f;
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
-        
-    }
+        if (IsPaused) return;
 
-    IEnumerator SpawnCoroutine()
-    {
+        _currentTimer += deltaTime;
 
-        while (true)
+        if (_currentTimer >= spawnPeriodSeconds)
         {
-            yield return new WaitForSeconds(spawnPeriodSeconds);
+            _currentTimer = 0f;
             Vector2 randomPosition = GetRandomPositionInRect();
             Instantiate(dirtPrefab, randomPosition, Quaternion.identity, transform);
         }
@@ -46,5 +48,11 @@ public class DirtSpawner : MonoBehaviour
         float randomY = Random.Range(minY, maxY);
 
         return new Vector2(randomX, randomY);
+    }
+
+    private void OnDestroy()
+    {
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.UnregisterPausable(this);
     }
 }

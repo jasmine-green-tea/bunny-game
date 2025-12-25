@@ -18,7 +18,7 @@ public class Notification
 }
 
 
-public class NotificationManager : MonoBehaviour
+public class NotificationManager : PausableObject
 {
 
 
@@ -201,6 +201,9 @@ public class NotificationManager : MonoBehaviour
 
         AddNotification(null, true);
         AddNotification(null, true);
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
 
     }
 

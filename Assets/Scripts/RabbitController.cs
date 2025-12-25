@@ -12,7 +12,7 @@ public enum BunnyColor
     MaxColors
 }
 
-public class RabbitController : MonoBehaviour
+public class RabbitController : PausableObject
 {
     // Start is called before the first frame update
 
@@ -48,6 +48,7 @@ public class RabbitController : MonoBehaviour
 
     private float animationEndTime = 0f;
     private bool isAnimationForced = false;
+    private Coroutine _directionCoroutine;
 
     public UnityEvent forcedAnimationEvent;
     public UnityEvent releaseAnimationEvent;
@@ -55,16 +56,24 @@ public class RabbitController : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(DirectionPickerCoroutine());
+        _directionCoroutine = StartCoroutine(DirectionPickerCoroutine());
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.RegisterPausable(this);
     }
 
-    private void Update()
+    protected override void UpdatePausable(float deltaTime)
     {
-        animator.speed = animatorSpeed;
+        if (!IsPaused)
+            animator.speed = animatorSpeed;
         //transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
-        rb.velocity = movementDirection * movementSpeed;
-
-        isSad = needSystem.GetIsSad();
+        
+        if (!IsPaused && !ShouldPauseMovement())
+            rb.velocity = movementDirection * movementSpeed;
+        else
+            rb.velocity = Vector2.zero;
+        if (!IsPaused)
+            isSad = needSystem.GetIsSad();
 
         UpdateAnimationState();
         UpdateFlipOrientation();
@@ -77,7 +86,8 @@ public class RabbitController : MonoBehaviour
 
     private void UpdateFlipOrientation()
     {
-
+        if (IsPaused)
+            return;
         if (rb.velocity.x < 0 && movementDirection.magnitude > 0)
             spriteRenderer.flipX = true;
         if (rb.velocity.x > 0 && movementDirection.magnitude > 0)
@@ -162,7 +172,7 @@ public class RabbitController : MonoBehaviour
             yield return new WaitWhile(() => ShouldPauseMovement());
 
             // Only pick direction if we're allowed to move
-            if (!ShouldPauseMovement())
+            if (!ShouldPauseMovement() && !IsPaused)
             {
                 int x = UnityEngine.Random.Range(-1, 2);
                 int y = UnityEngine.Random.Range(-1, 2);
@@ -173,7 +183,17 @@ public class RabbitController : MonoBehaviour
             }
 
             float multiplier = (movementDirection.magnitude == 0) ? 2 : 1;
-            yield return new WaitForSeconds(directionUpdatePeriodSeconds * multiplier);
+
+            float timer = 0f;
+            
+            while (timer < directionUpdatePeriodSeconds * multiplier)
+            {
+                if (!IsPaused)
+                {
+                    timer += Time.deltaTime;
+                }
+                yield return null;
+            }
         }
     }
 
@@ -182,5 +202,42 @@ public class RabbitController : MonoBehaviour
         return isSad || isEating || isPlaying || pausedForInteraction || isAnimationForced;
     }
 
+    protected override void OnPaused()
+    {
+        // Stop movement immediately
+        rb.velocity = Vector2.zero;
 
+        // Slow down animator
+        animator.speed = 0f;
+
+        Debug.Log("Rabbit: Paused");
+    }
+
+    protected override void OnResumed()
+    {
+        // Restore animator speed
+        animator.speed = animatorSpeed;
+
+        Debug.Log("Rabbit: Resumed");
+    }
+
+    // Handle time scale changes
+    protected override void OnTimeScaleChanged()
+    {
+        if (!IsPaused)
+        {
+            animator.speed = animatorSpeed * TimeScale;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_directionCoroutine != null)
+        {
+            StopCoroutine(_directionCoroutine);
+        }
+
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.UnregisterPausable(this);
+    }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DirtPileRoot : MonoBehaviour, IPointerClickHandler
+public class DirtPileRoot : PausableObject, IPointerClickHandler
 {
     // Start is called before the first frame update
     public void OnPointerClick(PointerEventData eventData)
