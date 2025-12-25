@@ -209,16 +209,12 @@ public class RabbitController : PausableObject
 
         // Slow down animator
         animator.speed = 0f;
-
-        Debug.Log("Rabbit: Paused");
     }
 
     protected override void OnResumed()
     {
         // Restore animator speed
         animator.speed = animatorSpeed;
-
-        Debug.Log("Rabbit: Resumed");
     }
 
     // Handle time scale changes
