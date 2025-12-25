@@ -30,8 +30,6 @@ public class DirtSpawner : MonoBehaviour
             Vector2 randomPosition = GetRandomPositionInRect();
             Instantiate(dirtPrefab, randomPosition, Quaternion.identity, transform);
         }
-
-        yield return null;
     }
 
     private Vector2 GetRandomPositionInRect()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 public enum BunnyColor
 {
@@ -48,6 +49,9 @@ public class RabbitController : MonoBehaviour
     private float animationEndTime = 0f;
     private bool isAnimationForced = false;
 
+    public UnityEvent forcedAnimationEvent;
+    public UnityEvent releaseAnimationEvent;
+
 
     private void Start()
     {
@@ -86,6 +90,7 @@ public class RabbitController : MonoBehaviour
             return;
         else if (isAnimationForced && Time.time >= animationEndTime)
         {
+            releaseAnimationEvent.Invoke();
             isAnimationForced = false;
             isEating = false;
             isPlaying = false;
@@ -143,6 +148,9 @@ public class RabbitController : MonoBehaviour
 
     private void StartForcedAnimation(float duration)
     {
+
+        forcedAnimationEvent.Invoke();
+
         isAnimationForced = true;
         animationEndTime = Time.time + duration;
     }

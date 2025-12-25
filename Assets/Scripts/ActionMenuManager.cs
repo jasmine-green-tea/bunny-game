@@ -50,7 +50,7 @@ public class ActionMenuManager : MonoBehaviour
         inventoryPosition = screenPosition + menuOffset;
 
         // Активируем только доступные действия
-        feedButton.gameObject.SetActive(rabbit.canBeFed);
+        feedButton.gameObject.SetActive(true);
         // Другие действия
 
         // Показываем меню

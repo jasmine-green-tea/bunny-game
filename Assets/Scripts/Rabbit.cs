@@ -32,12 +32,21 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     [Header("Визуальные элементы")]
     public GameObject selectionCircle;
 
-    [Header("Действия")]
-    public bool canBeFed = true;
+    public bool interactable = true;
     // Другие действия
 
     private bool isInteracted = false;
     public RabbitController controller;
+
+    private void DisableInteraction()
+    {
+        interactable = false;
+    }
+
+    private void EnableInteraction()
+    {
+        interactable = true;
+    }
 
     public void SetControllerColor()
     {
@@ -82,6 +91,9 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         }
 
 
+        controller.forcedAnimationEvent.AddListener(DisableInteraction);
+        controller.releaseAnimationEvent.AddListener(EnableInteraction);
+
         //RabbitManager.Instance.RegisterRabbit(this);
     }
 
@@ -110,6 +122,9 @@ public class Rabbit : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
+
+        if (!interactable)
+            return;
 
         // Показываем меню действий
         isInteracted = true;
