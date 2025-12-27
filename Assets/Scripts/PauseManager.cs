@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PauseManager : MonoBehaviour
 {
@@ -31,9 +33,9 @@ public class PauseManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePauseAll();
-            pauseMenu.SetActive(_isGamePaused);
 
         }
+        pauseMenu.SetActive(_isGamePaused);
     }
 
     public bool RegisterPausable(IPausable pausable)
@@ -56,7 +58,6 @@ public class PauseManager : MonoBehaviour
         _isGamePaused = true;
         foreach (var pausable in _pausableObjects)
         {
-            Debug.Log(pausable.GetType());
             pausable.Pause();
         }
     }
@@ -84,5 +85,11 @@ public class PauseManager : MonoBehaviour
     {
         _globalTimeScale = Mathf.Max(0f, scale);
         Time.timeScale = _globalTimeScale;
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+
     }
 }
