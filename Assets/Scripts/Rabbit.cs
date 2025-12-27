@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class RabbitStats
 {
@@ -66,6 +67,7 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
     public void SetName(string newName)
     {
         rabbitName = newName;
+        transform.GetChild(transform.childCount-1).GetComponent<TMP_Text>().text = newName;
     }
 
     public void SetNeedSystemMultipliers(float hungerRate, float moodRate, float hygieneRate)

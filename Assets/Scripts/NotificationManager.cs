@@ -46,7 +46,7 @@ public class NotificationManager : PausableObject
             Instance = this;
     }
 
-    private string GetDayString(int days)
+    public string GetDayString(int days)
     {
         int d = days % 10;
         switch (d)
