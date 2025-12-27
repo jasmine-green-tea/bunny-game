@@ -16,6 +16,8 @@ public class RabbitStats
     public BunnyColor bunnyColor;
     public int daysLeft;
     public int currentDays;
+    public float sadTime;
+
 
     //public List<InventoryItem> likedItems = new List<InventoryItem>();
     //public List<InventoryItem> dislikedItems = new List<InventoryItem>();
@@ -38,6 +40,13 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
 
     private bool isInteracted = false;
     public RabbitController controller;
+
+    
+    public void SaveSadTime()
+    {
+        rabbitStats.sadTime = needSystem.sadTime;
+        Debug.Log("sad time saved = " + rabbitStats.sadTime);
+    }
 
     private void DisableInteraction()
     {

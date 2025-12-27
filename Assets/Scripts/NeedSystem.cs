@@ -56,7 +56,9 @@ public class NeedSystem : PausableObject
     public RabbitController rabbitController;
 
     private List<DirtPile> dirtPiles;
-    
+
+
+    public float sadTime = 0f;
 
     public void Pause(bool paused)
     {
@@ -115,6 +117,7 @@ public class NeedSystem : PausableObject
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} голодает! Накормите кролика!");
             // Добавить визуальные эффекты и логику поведения голодного кролика
+            sadTime += Time.deltaTime;
         }
         else
             isStarving = false;
@@ -150,6 +153,8 @@ public class NeedSystem : PausableObject
             isSad = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} грустит! Поиграйте с кроликом!");
+            sadTime += Time.deltaTime;
+
         }
         else
             isSad = false;
@@ -193,6 +198,7 @@ public class NeedSystem : PausableObject
             isDirty = true;
             string name = rabbit != null ? rabbit.GetName() : gameObject.name;
             //Debug.LogWarning($"{name} не любит быть в грязи! Прибиритесь!");
+            sadTime += Time.deltaTime;
         }
         else
             isDirty = false;

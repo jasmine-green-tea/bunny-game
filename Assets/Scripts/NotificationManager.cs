@@ -39,6 +39,12 @@ public class NotificationManager : PausableObject
     [SerializeField] private List<InventoryItem> inventoryItemsDB = new List<InventoryItem>();
     [SerializeField] private List<string> BunnyNameDB = new List<string>();
 
+    int totalRep = 0;
+
+    public TMP_Text repText;
+
+    float badRepThresholdSeconds = 5;
+
     public Sprite[] rabbitSprites;
     private void Awake()
     {
@@ -69,7 +75,10 @@ public class NotificationManager : PausableObject
         if (newRabbit)
             notifications.Add(notification);
         else
+        {
             notifications.Insert(0, notification);
+            rabbit.SaveSadTime();
+        }
 
         if (!notificationKnob.activeSelf)
             notificationKnob.SetActive(true);
@@ -137,6 +146,20 @@ public class NotificationManager : PausableObject
             releaseForm.transform.GetChild(0).Find("BunnySprite").GetComponent<Image>().sprite = rabbitSprites[(int)currentRabbitStats.bunnyColor];
             releaseForm.transform.GetChild(0).Find("Days").GetComponent<TMP_Text>().text = "Пробыл " + currentRabbitStats.daysLeft + GetDayString(currentRabbitStats.daysLeft);
 
+            int reputation = 5;
+
+            reputation -= Mathf.FloorToInt(currentRabbitStats.sadTime / badRepThresholdSeconds);
+
+            releaseForm.transform.GetChild(2).GetComponent<Image>().color = (reputation < 0) ? negativeRep : positiveRep;
+            releaseForm.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text = "Репутация " + (reputation > 0 ? "+":(reputation < 0 ? "-" : "")) + Mathf.Abs(reputation);
+            
+            totalRep += reputation;
+
+            repText.text = "Репутация: " + totalRep;
+
+
+
+
             // fill data with money and reputation, probably rabbit stats
         }
 
@@ -198,6 +221,9 @@ public class NotificationManager : PausableObject
         applicationForm.SetActive(false);
         releaseForm.SetActive(false);
         notificationKnob.SetActive(false);
+
+        repText.text = "Репутация: " + totalRep;
+
 
         AddNotification(null, true);
         AddNotification(null, true);

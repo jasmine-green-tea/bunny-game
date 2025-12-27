@@ -38,8 +38,6 @@ public class BunnyBD : PausableObject
             index = index - 1;
         if (index < 0)
             index = bunnyList.Count - 1;
-        Debug.Log(index);
-
 
         currentRabbitStats = bunnyList[index].rabbitStats;
 
@@ -48,7 +46,6 @@ public class BunnyBD : PausableObject
         bunnyFrame.transform.Find("BunnyName").GetComponent<TMP_Text>().text = currentRabbitStats.bunnyName;
         bunnyFrame.transform.Find("BunnySprite").GetComponent<Image>().sprite = NotificationManager.Instance.rabbitSprites[(int)currentRabbitStats.bunnyColor];
         bunnyFrame.transform.Find("Days").GetComponent<TMP_Text>().text = "Осталось: " + (currentRabbitStats.currentDays) + NotificationManager.Instance.GetDayString(currentRabbitStats.currentDays);
-
     }
 
     public void ShowBD()
