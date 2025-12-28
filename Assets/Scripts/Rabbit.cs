@@ -98,7 +98,8 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            if (transform.GetChild(i).gameObject.name != "Shadow")
+                transform.GetChild(i).gameObject.SetActive(false);
         }
 
 
@@ -116,7 +117,8 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).gameObject.SetActive(true);
+            if (transform.GetChild(i).gameObject.name != "Shadow")
+                transform.GetChild(i).gameObject.SetActive(true);
         }
         needSystem.UpdateUI();
     }
@@ -129,7 +131,8 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            if (transform.GetChild(i).gameObject.name != "Shadow")
+                transform.GetChild(i).gameObject.SetActive(false);
         }
 
     }
