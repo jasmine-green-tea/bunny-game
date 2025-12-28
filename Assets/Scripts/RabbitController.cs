@@ -138,11 +138,13 @@ public class RabbitController : PausableObject
             case RabbitAnimationState.Eating:
                 animator.Play("eat");
                 movementDirection = Vector2.zero;
+                AudioManager.Instance.PlayEat();
                 StartForcedAnimation(3f);
                 break;
             case RabbitAnimationState.Playing:
                 animator.Play("play");
                 movementDirection = Vector2.zero;
+                AudioManager.Instance.PlayPlay();
                 StartForcedAnimation(3f);
                 break;
             case RabbitAnimationState.Moving:

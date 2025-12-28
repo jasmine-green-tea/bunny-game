@@ -19,8 +19,8 @@ public class TimeManager : PausableObject
     private Button bellButton;
     [SerializeField]
     private TMP_Text timeText;
-    [SerializeField]
-    private TMP_Text countdownText;
+    //[SerializeField]
+    //private TMP_Text countdownText;
     [SerializeField]
     private TMP_Text dateText;
 
@@ -93,7 +93,7 @@ public class TimeManager : PausableObject
         bellButton.interactable = true;
         RabbitManager.Instance.SetRabbitsPause(false);
         RabbitManager.Instance.DecreaseDays();
-        countdownText.gameObject.SetActive(true);
+        //countdownText.gameObject.SetActive(true);
 
         if (timerCoroutine != null)
         {
@@ -137,7 +137,7 @@ public class TimeManager : PausableObject
                     if (currentTimestampIndex != -1)
                     {
                         string countdownString = "Следующий кролик через: " + (timestamps[currentTimestampIndex] - counter).ToString();
-                        countdownText.text = countdownString;
+                       // countdownText.text = countdownString;
 
                         if (counter == timestamps[currentTimestampIndex])
                         {
@@ -145,7 +145,7 @@ public class TimeManager : PausableObject
                             if (currentTimestampIndex == timestamps.Count)
                             {
                                 currentTimestampIndex = -1;
-                                countdownText.gameObject.SetActive(false);
+                                //countdownText.gameObject.SetActive(false);
                             }
 
                             NotificationManager.Instance.AddNotification(null, true);
@@ -173,21 +173,21 @@ public class TimeManager : PausableObject
 
         // Optional: Update UI to show pause state
         // You could change the time display color or add "PAUSED" text
-        if (countdownText.gameObject.activeSelf)
-        {
-            countdownText.text += " [Пауза]";
-        }
+        //if (countdownText.gameObject.activeSelf)
+        //{
+        //    countdownText.text += " [Пауза]";
+        //}
     }
 
     protected override void OnResumed()
     {
 
         // Optional: Remove pause indicator from UI
-        if (countdownText.gameObject.activeSelf && countdownText.text.Contains("[Пауза]"))
-        {
-            string currentText = countdownText.text;
-            countdownText.text = currentText.Replace(" [Пауза]", "");
-        }
+        //if (countdownText.gameObject.activeSelf && countdownText.text.Contains("[Пауза]"))
+        //{
+        //    string currentText = countdownText.text;
+        //    countdownText.text = currentText.Replace(" [Пауза]", "");
+        //}
     }
 
     private string GetMonthName()

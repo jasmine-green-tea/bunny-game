@@ -178,9 +178,17 @@ public class Rabbit : PausableObject, IPointerClickHandler, IPointerEnterHandler
             float multiplier = 1f;
 
             if (inventoryItem == rabbitStats.likedItem)
+            {
                 multiplier = 1.5f;
+                needSystem.IncreaseMood(10);
+
+            }
             if (inventoryItem == rabbitStats.dislikedItem)
+            {
                 multiplier = 0.75f;
+                needSystem.DecreaseMood(10);
+
+            }
 
             switch (inventoryItem.itemType)
             {

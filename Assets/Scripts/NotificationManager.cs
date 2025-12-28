@@ -86,6 +86,7 @@ public class NotificationManager : PausableObject
         if (!notificationKnob.activeSelf)
             notificationKnob.SetActive(true);
 
+        AudioManager.Instance.PlayNotify();
 
 
     }
@@ -100,6 +101,7 @@ public class NotificationManager : PausableObject
 
         PauseManager.Instance.PauseAll(false);
         currentNotification = notifications[0];
+        AudioManager.Instance.PlayPaper();
         // show the head of the list notification
 
         //TimeManager.Instance.SetPaused(true);
@@ -219,8 +221,24 @@ public class NotificationManager : PausableObject
 
 
         if (totalRep < 0)
+        {
             gameOverScreen.SetActive(true);
+            AudioManager.Instance.PlayPaper();
+        }
 
+    }
+
+    public void AddReputation(int rep)
+    {
+        totalRep += rep;
+
+        repText.text = "Репутация: " + totalRep;
+
+        if (totalRep < 0)
+        {
+            gameOverScreen.SetActive(true);
+            AudioManager.Instance.PlayPaper();
+        }
     }
 
 

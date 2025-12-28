@@ -57,6 +57,8 @@ public class BunnyBD : PausableObject
 
         bd.SetActive(true);
 
+        AudioManager.Instance.PlayPaper();
+
         PauseManager.Instance.PauseAll(false);
 
         ShowNextBunny(true);

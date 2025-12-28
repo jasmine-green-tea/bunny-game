@@ -8,7 +8,7 @@ public class DirtSpawner : PausableObject
     public RectTransform spawnArea;
     public float spawnPeriodSeconds;
 
-    public BoxCollider2D houseCollider;
+    public Collider2D[] colliders;
 
     private float _currentTimer;
 
@@ -53,7 +53,15 @@ public class DirtSpawner : PausableObject
             returnVector.x = Random.Range(minX, maxX);
             returnVector.y = Random.Range(minY, maxY);
 
-            if (!houseCollider.OverlapPoint(returnVector))
+            bool overlap = false;
+
+            foreach (Collider2D c in colliders)
+            {
+                if (c.OverlapPoint(returnVector))
+                    overlap |= true;
+            }
+
+            if (!overlap)
                 break;
 
         }

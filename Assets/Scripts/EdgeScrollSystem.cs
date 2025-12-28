@@ -11,6 +11,9 @@ public class EdgeScrollSystem : PausableObject
     public int edgeScrollSize;
     public float cameraSpeed = 2f;
 
+    public float xConstraint = 4.2f;
+    public float yConstraint = 11f;
+
 
     float minX;
     float maxX;
@@ -68,14 +71,14 @@ public class EdgeScrollSystem : PausableObject
         cameraTransform.Translate(inputDir * deltaTime * cameraSpeed);
         float newX = cameraTransform.position.x;
         float newY = cameraTransform.position.y;
-        if (cameraTransform.position.x > 3.9f)
-            newX = 3.9f;
-        if (cameraTransform.position.x < -3.9f)
-            newX = -3.9f;
-        if (cameraTransform.position.y > 11f)
-            newY = 11f;
-        if (cameraTransform.position.y < -11f)
-            newY = -11f;
+        if (cameraTransform.position.x > xConstraint)
+            newX = xConstraint;
+        if (cameraTransform.position.x < -xConstraint)
+            newX = -xConstraint;
+        if (cameraTransform.position.y > yConstraint)
+            newY = yConstraint;
+        if (cameraTransform.position.y < -yConstraint)
+            newY = -yConstraint;
         cameraTransform.position = new Vector2(newX, newY);
 
     }

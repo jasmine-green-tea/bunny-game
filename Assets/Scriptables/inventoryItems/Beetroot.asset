@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: "\u0421\u0432\u0435\u043A\u043B\u0430"
   itemIcon: {fileID: 21300000, guid: 3177f2fe81efe2d43ba56ae2780d683d, type: 3}
   itemPrefab: {fileID: 1346183651460259173, guid: bd44c95c86af8f948ba57b64072b6515, type: 3}
-  restoreValue: 1
+  restoreValue: 10
   itemType: 0
   description: 
