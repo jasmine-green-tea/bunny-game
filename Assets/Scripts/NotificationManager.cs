@@ -112,9 +112,9 @@ public class NotificationManager : PausableObject
 
             // generate stats for a rabbit
             RabbitStats newRabbitStats = new RabbitStats();
-            newRabbitStats.hungerRate = UnityEngine.Random.Range(0.3f, 1.2f);
-            newRabbitStats.moodRate = UnityEngine.Random.Range(0.3f, 1.2f);
-            newRabbitStats.hygieneRate = UnityEngine.Random.Range(3 + 3f*0.3f,3 + 3f*1.2f);
+            newRabbitStats.hungerRate = UnityEngine.Random.Range(0.2f, 0.8f);
+            newRabbitStats.moodRate = UnityEngine.Random.Range(0.2f, 0.8f);
+            newRabbitStats.hygieneRate = UnityEngine.Random.Range(3 + 3f*0.2f,3 + 3f*0.8f);
             newRabbitStats.bunnyColor = (BunnyColor)UnityEngine.Random.Range((int)BunnyColor.Orange, (int)BunnyColor.MaxColors);
             newRabbitStats.daysLeft = UnityEngine.Random.Range(1, 6);
             if (newRabbitStats.daysLeft == 2)
@@ -127,7 +127,12 @@ public class NotificationManager : PausableObject
 
             newRabbitStats.likedItem = inventoryItemsDB[liked_index];
             int disliked_index = (liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count;
-            newRabbitStats.dislikedItem = inventoryItemsDB[(liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count];
+            while (true)
+            {
+                newRabbitStats.dislikedItem = inventoryItemsDB[(liked_index + Random.Range(1, inventoryItemsDB.Count - 2)) % inventoryItemsDB.Count];
+                if (newRabbitStats.dislikedItem.itemType != ItemType.Toy)
+                    break;
+            }
             newRabbitStats.bunnyName = BunnyNameDB[Random.Range(0, BunnyNameDB.Count)];
 
 

@@ -53,20 +53,14 @@ public class DirtSpawner : PausableObject
             returnVector.x = Random.Range(minX, maxX);
             returnVector.y = Random.Range(minY, maxY);
 
-            bool overlap = false;
 
-            foreach (Collider2D c in colliders)
+            Collider2D overlap = Physics2D.OverlapPoint(returnVector);
+
+            if (overlap == null)
             {
-                if (c.OverlapPoint(returnVector))
-                    overlap |= true;
+                return returnVector;
             }
-
-            if (!overlap)
-                break;
-
         }
-
-        return returnVector;
     }
 
     private void OnDestroy()
