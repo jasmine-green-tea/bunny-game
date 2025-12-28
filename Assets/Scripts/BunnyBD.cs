@@ -57,6 +57,8 @@ public class BunnyBD : PausableObject
 
         bd.SetActive(true);
 
+        PauseManager.Instance.PauseAll(false);
+
         ShowNextBunny(true);
     }
 }
