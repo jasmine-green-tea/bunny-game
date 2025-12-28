@@ -105,11 +105,15 @@ public class NotificationManager : PausableObject
 
             // generate stats for a rabbit
             RabbitStats newRabbitStats = new RabbitStats();
-            newRabbitStats.hungerRate = UnityEngine.Random.Range(0.5f, 3f);
-            newRabbitStats.moodRate = UnityEngine.Random.Range(0.5f, 3f);
-            newRabbitStats.hygieneRate = UnityEngine.Random.Range(5 + 3f*0.5f,5 + 3f*3f);
+            newRabbitStats.hungerRate = UnityEngine.Random.Range(0.3f, 1.2f);
+            newRabbitStats.moodRate = UnityEngine.Random.Range(0.3f, 1.2f);
+            newRabbitStats.hygieneRate = UnityEngine.Random.Range(3 + 3f*0.3f,3 + 3f*1.2f);
             newRabbitStats.bunnyColor = (BunnyColor)UnityEngine.Random.Range((int)BunnyColor.Orange, (int)BunnyColor.MaxColors);
-            newRabbitStats.daysLeft = 1;
+            newRabbitStats.daysLeft = UnityEngine.Random.Range(1, 6);
+            if (newRabbitStats.daysLeft == 2)
+                newRabbitStats.daysLeft = (UnityEngine.Random.Range(0, 2) == 1 ? 3 : 1);
+            if (newRabbitStats.daysLeft == 4)
+                newRabbitStats.daysLeft = (UnityEngine.Random.Range(0, 2) == 1 ? 5 : 3);
             newRabbitStats.currentDays = newRabbitStats.daysLeft;
 
             int liked_index = Random.Range(0, inventoryItemsDB.Count-1);
@@ -144,9 +148,9 @@ public class NotificationManager : PausableObject
 
             releaseForm.transform.GetChild(0).Find("BunnyName").GetComponent<TMP_Text>().text = currentRabbitStats.bunnyName;
             releaseForm.transform.GetChild(0).Find("BunnySprite").GetComponent<Image>().sprite = rabbitSprites[(int)currentRabbitStats.bunnyColor];
-            releaseForm.transform.GetChild(0).Find("Days").GetComponent<TMP_Text>().text = "Пробыл " + currentRabbitStats.daysLeft + GetDayString(currentRabbitStats.daysLeft);
+            releaseForm.transform.GetChild(0).Find("Days").GetComponent<TMP_Text>().text = "Пробыл " + currentRabbitStats.daysLeft + GetDayString(currentRabbitStats.daysLeft) + "\nи уезжает домой";
 
-            int reputation = 5;
+            int reputation = 3;
 
             reputation -= Mathf.FloorToInt(currentRabbitStats.sadTime / badRepThresholdSeconds);
 
@@ -225,7 +229,6 @@ public class NotificationManager : PausableObject
         repText.text = "Репутация: " + totalRep;
 
 
-        AddNotification(null, true);
         AddNotification(null, true);
 
         if (PauseManager.Instance != null)
