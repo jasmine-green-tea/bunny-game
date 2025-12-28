@@ -98,11 +98,11 @@ public class NotificationManager : PausableObject
             return;
         }
 
-        PauseManager.Instance.PauseAll();
+        PauseManager.Instance.PauseAll(false);
         currentNotification = notifications[0];
         // show the head of the list notification
 
-        TimeManager.Instance.SetPaused(true);
+        //TimeManager.Instance.SetPaused(true);
 
         if (currentNotification.newRabbit)
         {
