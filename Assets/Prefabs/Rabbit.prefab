@@ -605,6 +605,7 @@ MonoBehaviour:
   colorControllers:
   - {fileID: 22100000, guid: 629b2202d3995a54dbddcf40f1994071, type: 2}
   - {fileID: 22100000, guid: 37a7b0ffbb5865245aaeb5fe8868bc6a, type: 2}
+  - {fileID: 22100000, guid: b4211947b69af4741b9c394b568929f5, type: 2}
   spriteRenderer: {fileID: 1585233548845092072}
   animatorSpeed: 1.7
   needSystem: {fileID: 2393840955734138149}

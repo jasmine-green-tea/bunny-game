@@ -140,6 +140,7 @@ public class NeedSystem : PausableObject
     {
         currentMood += amount;
         currentMood = Mathf.Clamp(currentMood, 0, maxMood);
+        rabbitController.isPlaying = true;
 
 
         CheckMood();

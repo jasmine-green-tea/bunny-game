@@ -9,6 +9,7 @@ public enum BunnyColor
 {
     Orange = 0,
     Gray = 1,
+    White = 2,
     MaxColors
 }
 
@@ -140,7 +141,7 @@ public class RabbitController : PausableObject
                 StartForcedAnimation(3f);
                 break;
             case RabbitAnimationState.Playing:
-                // animator.Play("play");
+                animator.Play("play");
                 movementDirection = Vector2.zero;
                 StartForcedAnimation(3f);
                 break;

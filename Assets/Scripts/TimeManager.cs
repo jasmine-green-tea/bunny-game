@@ -21,6 +21,8 @@ public class TimeManager : PausableObject
     private TMP_Text timeText;
     [SerializeField]
     private TMP_Text countdownText;
+    [SerializeField]
+    private TMP_Text dateText;
 
     [SerializeField]
     private float dayTimeSeconds = 100f;
@@ -50,7 +52,7 @@ public class TimeManager : PausableObject
     private void Start()
     {
 
-        currentDayStr = GetMonthName() + " " + currentDay.ToString();
+        currentDayStr = "Äåíü " + currentDay.ToString();
 
         if (PauseManager.Instance != null)
             PauseManager.Instance.RegisterPausable(this);
@@ -68,7 +70,7 @@ public class TimeManager : PausableObject
 
     public void ReleaseDay()
     {
-
+        dateText.text = currentDayStr;
         int currentDayRabbits = UnityEngine.Random.Range(maxRabbitsPerDay / 2, maxRabbitsPerDay);
 
         if (currentDayRabbits > 0)
@@ -160,19 +162,10 @@ public class TimeManager : PausableObject
         bellButton.interactable = false;
 
         // Advance to next day
-        if (currentDay + 1 > GetMaxMonthDays())
-        {
-            currentDay = 1;
-            currentMonth = (currentMonth + 1) % 13;
-            if (currentMonth == 0)
-                currentMonth = 1;
-        }
-        else
-        {
-            currentDay++;
-        }
 
-        currentDayStr = GetMonthName() + " " + currentDay.ToString();
+        currentDay++;
+
+        currentDayStr = "Äåíü " + currentDay.ToString();
     }
 
     protected override void OnPaused()
@@ -201,18 +194,18 @@ public class TimeManager : PausableObject
     {
         switch (currentMonth)
         {
-            case 1: return "JAN";
-            case 2: return "FEB";
-            case 3: return "MAR";
-            case 4: return "APR";
-            case 5: return "MAY";
-            case 6: return "JUN";
-            case 7: return "JUL";
-            case 8: return "AUG";
-            case 9: return "SEP";
-            case 10: return "OCT";
-            case 11: return "NOV";
-            case 12: return "DEC";
+            case 1: return "ßÍÂÀĞß";
+            case 2: return "ÔÅÂĞÀËß";
+            case 3: return "ÌÀĞÒÀ";
+            case 4: return "ÀÏĞÅËß";
+            case 5: return "ÌÀß";
+            case 6: return "ÈŞÍß";
+            case 7: return "ÈŞËß";
+            case 8: return "ÀÂÃÓÑÒÀ";
+            case 9: return "ÑÅÍÒßÁĞß";
+            case 10: return "ÎÊÒßÁĞß";
+            case 11: return "ÍÎßÁĞß";
+            case 12: return "ÄÅÊÀÁĞß";
         }
         return "NaM";
     }

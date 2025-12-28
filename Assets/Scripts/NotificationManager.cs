@@ -94,6 +94,8 @@ public class NotificationManager : PausableObject
             // probably notify the player there are no notifications
             return;
         }
+
+        PauseManager.Instance.PauseAll();
         currentNotification = notifications[0];
         // show the head of the list notification
 

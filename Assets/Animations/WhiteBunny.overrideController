@@ -6,16 +6,16 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OrangeBunny
+  m_Name: WhiteBunny
   m_Controller: {fileID: 9100000, guid: fd09a41e9743c584e8bcc0f85839fb03, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: 1298bb0e00182dc40a1bcaa935ebab0b, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 6169d7b71fd9c4d4b858b073a5dfa1b0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 34cb7d9de08ab1647825f70a3f64fc33, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 408a69a0639557e49ad937096fb5a099, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 7efb9683f134122428983c8ba197bee2, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 88f266c113ec13d41b7d07bf99ba6ac7, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: f9b34cdbf84e74d408ac3c97d3b764ab, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 14cc511b5df1f124ebdb3d940fcf6a69, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3891ad89fb328bf42aa708a16e164860, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: e69e1bab070dfb2469291d427f01fc63, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: b7ac2661c323e054a9a3bebc9d1b7210, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ebb9597a0730a9741ba65d2073cbe4b8, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 886e4c03c2ecc1b4e97aaa056ce5a25e, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 1fb179c7d284ae9498a3f43603d1c984, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6d711049c38522049ab03981b99021ee, type: 2}
