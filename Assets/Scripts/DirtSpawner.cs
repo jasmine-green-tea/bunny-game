@@ -8,6 +8,8 @@ public class DirtSpawner : PausableObject
     public RectTransform spawnArea;
     public float spawnPeriodSeconds;
 
+    public BoxCollider2D houseCollider;
+
     private float _currentTimer;
 
     // Start is called before the first frame update
@@ -44,10 +46,19 @@ public class DirtSpawner : PausableObject
         float minY = corners[0].y;
         float maxY = corners[2].y;
 
-        float randomX = Random.Range(minX, maxX);
-        float randomY = Random.Range(minY, maxY);
+        Vector2 returnVector = Vector2.zero;
 
-        return new Vector2(randomX, randomY);
+        while (true)
+        {
+            returnVector.x = Random.Range(minX, maxX);
+            returnVector.y = Random.Range(minY, maxY);
+
+            if (!houseCollider.OverlapPoint(returnVector))
+                break;
+
+        }
+
+        return returnVector;
     }
 
     private void OnDestroy()

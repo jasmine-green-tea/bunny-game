@@ -16,6 +16,8 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private float _globalTimeScale = 1f;
 
     public bool IsGamePaused => _isGamePaused;
+
+    private bool showMenu;
     public float GlobalTimeScale => _globalTimeScale;
 
     private void Awake()
@@ -32,10 +34,10 @@ public class PauseManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePauseAll();
+            PauseAll();
 
         }
-        pauseMenu.SetActive(_isGamePaused);
+        pauseMenu.SetActive(_isGamePaused && showMenu);
     }
 
     public bool RegisterPausable(IPausable pausable)
@@ -53,8 +55,9 @@ public class PauseManager : MonoBehaviour
         _pausableObjects.Remove(pausable);
     }
 
-    public void PauseAll()
+    public void PauseAll(bool showMenu = true)
     {
+        this.showMenu = showMenu;
         _isGamePaused = true;
         foreach (var pausable in _pausableObjects)
         {
