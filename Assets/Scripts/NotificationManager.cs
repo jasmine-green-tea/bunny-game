@@ -30,6 +30,8 @@ public class NotificationManager : PausableObject
     public GameObject applicationForm;
     public GameObject releaseForm;
 
+    public GameObject gameOverScreen;
+
     public Color positiveRep;
     public Color negativeRep;
 
@@ -39,7 +41,8 @@ public class NotificationManager : PausableObject
     [SerializeField] private List<InventoryItem> inventoryItemsDB = new List<InventoryItem>();
     [SerializeField] private List<string> BunnyNameDB = new List<string>();
 
-    int totalRep = 0;
+    public int totalRep = 20;
+    int currentRepIncrement = 0;
 
     public TMP_Text repText;
 
@@ -152,18 +155,13 @@ public class NotificationManager : PausableObject
             releaseForm.transform.GetChild(0).Find("BunnySprite").GetComponent<Image>().sprite = rabbitSprites[(int)currentRabbitStats.bunnyColor];
             releaseForm.transform.GetChild(0).Find("Days").GetComponent<TMP_Text>().text = "Пробыл " + currentRabbitStats.daysLeft + GetDayString(currentRabbitStats.daysLeft) + "\nи уезжает домой";
 
-            int reputation = 3;
 
-            reputation -= Mathf.FloorToInt(currentRabbitStats.sadTime / badRepThresholdSeconds);
+            currentRepIncrement = 3;
 
-            releaseForm.transform.GetChild(2).GetComponent<Image>().color = (reputation < 0) ? negativeRep : positiveRep;
-            releaseForm.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text = "Репутация " + (reputation > 0 ? "+":(reputation < 0 ? "-" : "")) + Mathf.Abs(reputation);
-            
-            totalRep += reputation;
+            currentRepIncrement -= Mathf.FloorToInt(currentRabbitStats.sadTime / badRepThresholdSeconds);
 
-            repText.text = "Репутация: " + totalRep;
-
-
+            //releaseForm.transform.GetChild(2).GetComponent<Image>().color = (reputation < 0) ? negativeRep : positiveRep;
+            releaseForm.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text = "Репутация " + (currentRepIncrement > 0 ? "+" : (currentRepIncrement < 0 ? "-" : "")) + Mathf.Abs(currentRepIncrement);
 
 
             // fill data with money and reputation, probably rabbit stats
@@ -204,6 +202,10 @@ public class NotificationManager : PausableObject
         // add money
         // add reputation
 
+        totalRep += currentRepIncrement;
+
+        repText.text = "Репутация: " + totalRep;
+
         RabbitManager.Instance.UnregisterRabbit(currentNotification.rabbit);
 
         releaseForm.SetActive(false);
@@ -216,6 +218,9 @@ public class NotificationManager : PausableObject
         TimeManager.Instance.SetPaused(false);
 
 
+        if (totalRep < 0)
+            gameOverScreen.SetActive(true);
+
     }
 
 
@@ -227,6 +232,7 @@ public class NotificationManager : PausableObject
         applicationForm.SetActive(false);
         releaseForm.SetActive(false);
         notificationKnob.SetActive(false);
+        gameOverScreen.SetActive(false);
 
         repText.text = "Репутация: " + totalRep;
 
